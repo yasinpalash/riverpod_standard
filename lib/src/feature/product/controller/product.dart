@@ -15,18 +15,20 @@ class ProductController {
   final ProductRepo _repo;
   ProductController({required ProductRepo repo}) : _repo = repo;
 
-  Future<List<Product>?> getProducts({ BuildContext? context }) async {
+  Future<List<Product>?>
+
+  getProducts({ BuildContext? context }) async {
     final result = await _repo.getProducts();
     return result.fold(
       (failure){
         if(AppConfig.devMode && context!=null){
-          SnackBarService.showSnackBar(context: context, message: SuccessMessage.productsFetched);
+          SnackBarService.showSnackBar(context: context, message: FailureMessage.productsFetched);
         }
         return null;
       },
       (products){
         if(AppConfig.devMode && context!=null){
-          SnackBarService.showSnackBar(context: context, message: FailureMessage.productsFetched);
+          SnackBarService.showSnackBar(context: context, message:SuccessMessage.productsFetched );
         }
         return products;
       },
