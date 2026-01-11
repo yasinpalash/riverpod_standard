@@ -28,40 +28,50 @@ class AppTheme {
     return ThemeData(
       brightness: Brightness.dark,
       fontFamily: AppTextStyles.fontFamily,
-      primaryColor: AppColors.primary,
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
         secondary: AppColors.lightGrey,
         error: AppColors.error,
-        background: AppColors.black,
+        surface: AppColors.black,
+        onPrimary: AppColors.white,
+        onSecondary: AppColors.white,
+        onSurface: AppColors.white,
+        onError: AppColors.white,
       ),
-      // backgroundColor: AppColors.black,
       scaffoldBackgroundColor: AppColors.black,
       textTheme: TextThemes.darkTextTheme,
       primaryTextTheme: TextThemes.primaryTextTheme,
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         elevation: 0,
         backgroundColor: AppColors.black,
-        titleTextStyle: AppTextStyles.h2,
+        titleTextStyle: AppTextStyles.h2.copyWith(color: AppColors.white),
+        iconTheme: const IconThemeData(color: AppColors.white),
       ),
     );
   }
 
-  /// Light theme data of the app
   static ThemeData get lightTheme {
     return ThemeData(
       brightness: Brightness.light,
-      primaryColor: AppColors.primary,
-      textTheme: TextThemes.textTheme,
-      primaryTextTheme: TextThemes.primaryTextTheme,
+      fontFamily: AppTextStyles.fontFamily,
       colorScheme: const ColorScheme.light(
         primary: AppColors.primary,
         secondary: AppColors.lightGrey,
         error: AppColors.error,
+        surface: AppColors.white,
+        onPrimary: AppColors.white,
+        onSecondary: AppColors.black,
+        onSurface: AppColors.black,
+        onError: AppColors.white,
       ),
-      appBarTheme: const AppBarTheme(
+      scaffoldBackgroundColor: AppColors.white,
+      textTheme: TextThemes.lightTextTheme,
+      primaryTextTheme: TextThemes.primaryTextTheme,
+      appBarTheme: AppBarTheme(
         elevation: 0,
         backgroundColor: AppColors.primary,
+        titleTextStyle: AppTextStyles.h2.copyWith(color: AppColors.white),
+        iconTheme: const IconThemeData(color: AppColors.white),
       ),
     );
   }
