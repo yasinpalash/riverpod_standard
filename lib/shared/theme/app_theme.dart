@@ -20,6 +20,7 @@ class AppThemeModeNotifier extends StateNotifier<ThemeMode> {
   AppThemeModeNotifier(this.storageService) : super(ThemeMode.light) {
     getCurrentTheme();
   }
+
   void getCurrentTheme() async {
     final theme = await storageService.get(APP_THEME_STORAGE_KEY);
     final value = ThemeMode.values.byName('${theme ?? 'light'}');
