@@ -3,14 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/shared/data/local/storage_service.dart';
 import 'package:riverpod_standard/shared/theme/text_styles.dart';
 import 'package:riverpod_standard/shared/theme/text_theme.dart';
+import '../domain/providers/shared_preferences_storage_service_provider.dart';
 import '../globals.dart';
 import 'app_colors.dart';
 
-// final appThemeProvider= StateNotifierProvider<AppThemeModeNotifier,ThemeMode>(
-//     (ref){
-//       return AppThemeModeNotifier();
-//     }
-// )
+final appThemeProvider = StateNotifierProvider<AppThemeModeNotifier, ThemeMode>(
+  (ref) {
+    final storage = ref.watch(storageServiceProvider);
+    return AppThemeModeNotifier(storage);
+  },
+);
+
 class AppThemeModeNotifier extends StateNotifier<ThemeMode> {
   final StorageService storageService;
   ThemeMode currentTheme = ThemeMode.light;
@@ -23,6 +26,7 @@ class AppThemeModeNotifier extends StateNotifier<ThemeMode> {
     state = value;
   }
 }
+
 class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
