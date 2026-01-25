@@ -1,6 +1,8 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_standard/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:riverpod_standard/features/splash/presentation/providers/splash_provider.dart';
 
 @RoutePage()
 class SplashScreen extends ConsumerStatefulWidget {
@@ -12,6 +14,14 @@ class SplashScreen extends ConsumerStatefulWidget {
 }
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
+  @override
+  void initState() {
+Future.delayed(const Duration(seconds: 2),()async{
+  final isUserLoggedIn=await ref.read(userLoginCheckProvider.future);
+ // final route=isUserLoggedIn? const DashboardScreen(): const
+});
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
