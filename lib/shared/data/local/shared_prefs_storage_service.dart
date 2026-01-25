@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:riverpod_standard/shared/data/local/storage_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,36 +17,32 @@ class SharedPrefsService implements StorageService {
   bool get hasInitialized => sharedPreferences != null;
 
   @override
-  Future<void> clear() {
-    // TODO: implement clear
-    throw UnimplementedError();
+  Future<void> clear() async {
+    sharedPreferences = await initCompleter.future;
+    await sharedPreferences!.clear();
   }
 
   @override
-  Future<Object?> get(String key) {
-    // TODO: implement get
-    throw UnimplementedError();
+  Future<Object?> get(String key) async {
+    sharedPreferences = await initCompleter.future;
+    return sharedPreferences!.get(key);
   }
 
   @override
-  Future<bool> has(String key) {
-    // TODO: implement has
-    throw UnimplementedError();
-  }
-
-
-
-
-
-  @override
-  Future<bool> remove(String key) {
-    // TODO: implement remove
-    throw UnimplementedError();
+  Future<bool> has(String key) async {
+    sharedPreferences = await initCompleter.future;
+    return sharedPreferences?.containsKey(key) ?? false;
   }
 
   @override
-  Future<bool> set(String key, String data) {
-    // TODO: implement set
-    throw UnimplementedError();
+  Future<bool> remove(String key) async {
+    sharedPreferences = await initCompleter.future;
+    return await sharedPreferences!.remove(key);
+  }
+
+  @override
+  Future<bool> set(String key, String data) async {
+    sharedPreferences = await initCompleter.future;
+    return await sharedPreferences!.setString(key, data.toString());
   }
 }
