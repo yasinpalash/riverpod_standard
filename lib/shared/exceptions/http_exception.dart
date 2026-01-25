@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../domain/models/either.dart';
+import '../domain/models/response.dart';
 
 class AppException implements Exception {
   final String message;
@@ -19,7 +20,7 @@ class AppException implements Exception {
   }
 }
 
-class CacheFailureException extends Equatable implements AppException{
+class CacheFailureException extends Equatable implements AppException {
   @override
   String get identifier => 'Cache failure exception';
 
@@ -31,7 +32,7 @@ class CacheFailureException extends Equatable implements AppException{
   @override
   List<Object?> get props => [message, statusCode, identifier];
 }
+
 extension HttpExceptionExtension on AppException {
   Left<AppException, Response> get toLeft => Left<AppException, Response>(this);
 }
-
