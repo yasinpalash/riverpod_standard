@@ -22,7 +22,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       final route =
           isUserLoggedIn
               ? const DashboardRoute()
-              : const LoginRoute() as PageRouteInfo;
+              :  LoginRoute() as PageRouteInfo;
 
       // ignore: use_build_context_synchronously
       AutoRouter.of(context).pushAndPopUntil(route, predicate: (_) => false);
