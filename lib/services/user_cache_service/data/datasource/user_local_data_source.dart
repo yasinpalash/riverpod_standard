@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import '../../../../shared/data/local/storage_service.dart';
 import '../../../../shared/domain/models/either.dart';
 import '../../../../shared/domain/models/user/user_model.dart';
@@ -40,20 +39,17 @@ class UserLocalDatasource extends UserDataSource {
   }
 
   @override
-  Future<bool> deleteUser() {
-    // TODO: implement deleteUser
-    throw UnimplementedError();
+  Future<bool> deleteUser() async {
+    return await storageService.remove(storageKey);
   }
 
   @override
-  Future<bool> hasUser() {
-    // TODO: implement hasUser
-    throw UnimplementedError();
+  Future<bool> hasUser() async {
+    return await storageService.has(storageKey);
   }
 
   @override
-  Future<bool> saveUser({required User user}) {
-    // TODO: implement saveUser
-    throw UnimplementedError();
+  Future<bool> saveUser({required User user}) async {
+    return await storageService.set(storageKey, jsonEncode(user.toJson()));
   }
 }
