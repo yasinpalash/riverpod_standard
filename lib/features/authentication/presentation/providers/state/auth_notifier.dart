@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/features/authentication/presentation/providers/state/auth_state.dart';
 import 'package:riverpod_standard/shared/domain/models/user/user_model.dart';
 import '../../../../../services/user_cache_service/domain/repositories/user_cache_repository.dart';
+import '../../../../../shared/exceptions/http_exception.dart';
 import '../../../domain/repositories/auth_repository.dart';
 
 class AuthNotifier extends StateNotifier<AuthState> {
@@ -16,5 +17,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
       user: User(username: username, password: password),
     );
 
+    state = await response.fold((failure) => AuthState.failure(failure), (
+      user,
+    ) async {
+      final hasSavedUser = await userRepository.saveUser(user: user);
+      if (hasSavedUser) {
+        return const AuthState.success();
+      }
+      return AuthState.failure(CacheFailureException());
+    });
   }
 }
