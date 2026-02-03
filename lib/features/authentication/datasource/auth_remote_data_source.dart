@@ -13,7 +13,21 @@ class LoginUserRemoteDataSource implements LoginUserDataSource {
 
   @override
   Future<Either<AppException, User>> loginUser({required User user}) async {
-    // TODO: implement loginUser
-    throw UnimplementedError();
+    try {
+      final eitherType = await networkService.post(
+        '/auth/login',
+        data: user.toJson(),
+      );
+      return eitherType.fold(
+        (exception) {
+          return Left(exception);
+        },
+        (response) {
+          final user = User.fromJson(response.data);
+          networkService.updateHeader({'Authorization': user.token});
+          return Right(user);
+        },
+      );
+    } catch (e) {}
   }
 }
