@@ -28,6 +28,14 @@ class LoginUserRemoteDataSource implements LoginUserDataSource {
           return Right(user);
         },
       );
-    } catch (e) {}
+    } catch (e) {
+      return Left(
+        AppException(
+          message: 'Unknown error occurred',
+          statusCode: 1,
+          identifier: '${e.toString()}\nLoginUserRemoteDataSource.loginUser',
+        ),
+      );
+    }
   }
 }
