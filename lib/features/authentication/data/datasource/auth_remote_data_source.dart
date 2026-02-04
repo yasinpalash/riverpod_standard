@@ -1,7 +1,7 @@
-import '../../../shared/data/remote/network_service.dart';
-import '../../../shared/domain/models/either.dart';
-import '../../../shared/domain/models/user/user_model.dart';
-import '../../../shared/exceptions/http_exception.dart';
+import '../../../../shared/data/remote/network_service.dart';
+import '../../../../shared/domain/models/either.dart';
+import '../../../../shared/domain/models/user/user_model.dart';
+import '../../../../shared/exceptions/http_exception.dart';
 
 abstract class LoginUserDataSource {
   Future<Either<AppException, User>> loginUser({required User user});
