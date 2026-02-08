@@ -22,9 +22,9 @@ class LoginScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(authStateNotifierProvider);
     ref.listen(authStateNotifierProvider.select((value) => value), ((
-        previous,
-        next,
-        ) {
+      previous,
+      next,
+    ) {
       if (next is Failure) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -44,15 +44,13 @@ class LoginScreen extends ConsumerWidget {
     }));
 
     return Scaffold(
+      appBar: AppBar(title: Text("Test-Driven Development")),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Colors.blue.shade50,
-              Colors.purple.shade50,
-            ],
+            colors: [Colors.blue.shade50, Colors.purple.shade50],
           ),
         ),
         child: SafeArea(
@@ -130,23 +128,24 @@ class LoginScreen extends ConsumerWidget {
                           ),
                           const SizedBox(height: 12),
                           state.maybeMap(
-                            loading: (_) => Container(
-                              height: 56,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Colors.blue.shade400,
-                                    Colors.purple.shade400,
-                                  ],
+                            loading:
+                                (_) => Container(
+                                  height: 56,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Colors.blue.shade400,
+                                        Colors.purple.shade400,
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: const Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: const Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
                             orElse: () => loginButton(ref),
                           ),
                         ],
@@ -169,10 +168,7 @@ class LoginScreen extends ConsumerWidget {
       height: 56,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Colors.blue.shade600,
-            Colors.purple.shade600,
-          ],
+          colors: [Colors.blue.shade600, Colors.purple.shade600],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
@@ -185,10 +181,12 @@ class LoginScreen extends ConsumerWidget {
       ),
       child: ElevatedButton(
         onPressed: () {
-          ref.read(authStateNotifierProvider.notifier).loginUser(
-            usernameController.text.trim(),
-            passwordController.text.trim(),
-          );
+          ref
+              .read(authStateNotifierProvider.notifier)
+              .loginUser(
+                usernameController.text.trim(),
+                passwordController.text.trim(),
+              );
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
