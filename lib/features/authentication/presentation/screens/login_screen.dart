@@ -103,8 +103,6 @@ class LoginScreen extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(height: 48),
-
-                    // Login Form Card
                     Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
@@ -112,7 +110,7 @@ class LoginScreen extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha: 0.05),
                             blurRadius: 30,
                             offset: const Offset(0, 10),
                           ),
@@ -131,26 +129,6 @@ class LoginScreen extends ConsumerWidget {
                             controller: passwordController,
                           ),
                           const SizedBox(height: 12),
-
-                          // Forgot Password
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () {
-                                // Add forgot password functionality
-                              },
-                              child: Text(
-                                "Forgot Password?",
-                                style: TextStyle(
-                                  color: Colors.blue.shade600,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-
-                          // Login Button
                           state.maybeMap(
                             loading: (_) => Container(
                               height: 56,
@@ -175,33 +153,6 @@ class LoginScreen extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(height: 24),
-
-                    // Sign Up Link
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Don't have an account?",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14,
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            // Navigate to sign up
-                          },
-                          child: Text(
-                            "Sign Up",
-                            style: TextStyle(
-                              color: Colors.blue.shade600,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
@@ -226,7 +177,7 @@ class LoginScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
+            color: Colors.blue.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
