@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final totalSalesProvider = StateProvider<int>((ref) => 12500);
 final totalOrdersProvider = StateProvider<int>((ref) => 320);
 final totalCustomersProvider = StateProvider<int>((ref) => 98);
+
 @RoutePage()
 class DashboardScreen extends ConsumerStatefulWidget {
   static const String routeName = 'DashboardScreen';
@@ -16,6 +17,8 @@ class DashboardScreen extends ConsumerStatefulWidget {
 }
 
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+  bool isSearchActive = false;
+  final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final totalSales = ref.watch(totalSalesProvider);
@@ -24,8 +27,36 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Dashboard"),
-        centerTitle: true,
+        title:
+            isSearchActive
+                ? TextField(
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  decoration: InputDecoration(
+                    hintText: 'Search here',
+                    hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                    border: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  ),
+                  controller: searchController,
+                  onChanged: null,
+                )
+                : const Text("Dashboard"),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(isSearchActive ? Icons.clear : Icons.search),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -135,16 +166,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             const SizedBox(height: 12),
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
-            Text(
-              title,
-              style: TextStyle(color: Colors.grey.shade700),
-            ),
+            Text(title, style: TextStyle(color: Colors.grey.shade700)),
           ],
         ),
       ),
@@ -160,8 +185,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         children: [
           CircleAvatar(
             radius: 24,
-            backgroundColor:
-            Theme.of(context).primaryColor.withOpacity(0.1),
+            backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
             child: Icon(icon, color: Theme.of(context).primaryColor),
           ),
           const SizedBox(height: 8),
