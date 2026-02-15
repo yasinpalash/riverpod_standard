@@ -6,13 +6,19 @@ class DashboardDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return SafeArea(
       bottom: false,
       child: Drawer(
         child: Column(
           children: [
-
+            UserAccountsDrawerHeader(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+              ),
+              accountName: Text("Yasin",style: Theme.of(context).textTheme.displaySmall,),
+              accountEmail: Text("yasinmai@gmail.com"),
+            ),
           ],
         ),
       ),

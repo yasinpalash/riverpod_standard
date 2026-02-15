@@ -2,6 +2,8 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../widgets/dashboard_drawer.dart';
+
 /// Providers
 final totalSalesProvider = StateProvider<int>((ref) => 12500);
 final totalOrdersProvider = StateProvider<int>((ref) => 320);
@@ -58,6 +60,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           ),
         ],
       ),
+      drawer: const DashboardDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
