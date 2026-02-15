@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/routes/app_route.dart';
+import 'package:riverpod_standard/services/user_cache_service/domain/providers/current_user_provider.dart';
 import 'package:riverpod_standard/services/user_cache_service/domain/providers/user_cache_provider.dart';
 import '../../../../shared/theme/app_theme.dart';
 
@@ -10,6 +11,7 @@ class DashboardDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentUser=ref.watch(currentUserProvider).asData?.value;
     return SafeArea(
       bottom: false,
       child: Drawer(
@@ -21,24 +23,22 @@ class DashboardDrawer extends ConsumerWidget {
                 color: Theme.of(context).colorScheme.surface,
               ),
               accountName: Text(
-                "Yasin",
+                '${currentUser?.firstName}',
                 style: Theme.of(context).textTheme.displaySmall,
               ),
               accountEmail: Text(
-                "yasinmai@gmail.com",
+                '${currentUser?.email}',
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
-              // currentAccountPicture: CircleAvatar(
-              //   backgroundImage: NetworkImage('${currentUser?.image}'),
-              // ),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: NetworkImage('${currentUser?.image}'),
+              ),
               otherAccountsPictures: [
                 InkWell(
                   onTap: () async {
                     await ref.read(userLocalRepositoryProvider).deleteUser();
                     // ignore: use_build_context_synchronously
-                    AutoRouter.of(
-                      context,
-                    ).pushAndPopUntil(LoginRoute(), predicate: (_) => false);
+                    AutoRouter.of(context,).pushAndPopUntil(LoginRoute(), predicate: (_) => false);
                   },
                   child: CircleAvatar(
                     child: Icon(
