@@ -21,6 +21,11 @@ class AppThemeModeNotifier extends StateNotifier<ThemeMode> {
     getCurrentTheme();
   }
 
+  void toggleTheme() {
+    state = state == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+    storageService.set(APP_THEME_STORAGE_KEY, state.name);
+  }
+
   void getCurrentTheme() async {
     final theme = await storageService.get(APP_THEME_STORAGE_KEY);
     final value = ThemeMode.values.byName('${theme ?? 'light'}');
@@ -31,7 +36,7 @@ class AppThemeModeNotifier extends StateNotifier<ThemeMode> {
 class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
-     // iconTheme: IconThemeData(color: Colors.red),
+      // iconTheme: IconThemeData(color: Colors.red),
       brightness: Brightness.dark,
       fontFamily: AppTextStyles.fontFamily,
       colorScheme: const ColorScheme.dark(
