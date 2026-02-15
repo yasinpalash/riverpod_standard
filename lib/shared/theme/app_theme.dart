@@ -31,6 +31,7 @@ class AppThemeModeNotifier extends StateNotifier<ThemeMode> {
 class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
+     // iconTheme: IconThemeData(color: Colors.red),
       brightness: Brightness.dark,
       fontFamily: AppTextStyles.fontFamily,
       colorScheme: const ColorScheme.dark(
@@ -57,6 +58,7 @@ class AppTheme {
 
   static ThemeData get lightTheme {
     return ThemeData(
+      //iconTheme: IconThemeData(color: Colors.green),
       brightness: Brightness.light,
       fontFamily: AppTextStyles.fontFamily,
       colorScheme: const ColorScheme.light(
