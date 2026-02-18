@@ -1,5 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/features/dashboard/presentation/providers/state/dashboard_state.dart';
+import 'package:riverpod_standard/shared/domain/models/either.dart';
+import 'package:riverpod_standard/shared/domain/models/paginated_response.dart';
+import 'package:riverpod_standard/shared/domain/models/product/product_model.dart';
+import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
 import '../../../../../shared/globals.dart';
 import '../../../domain/repositories/dashboard_repository.dart';
 
@@ -24,15 +28,29 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
       );
 
       final response = await dashboardRepository.fetchProducts(
-          skip: state.page * PRODUCTS_PER_PAGE);
-     // updateStateFromResponse(response);
-
-    }else{
+        skip: state.page * PRODUCTS_PER_PAGE,
+      );
+      // updateStateFromResponse(response);
+    } else {
       state = state.copyWith(
         state: DashboardConcreteState.fetchedAllProducts,
         message: 'No more products available',
         isLoading: false,
       );
     }
+  }
+
+  void updateStateFromResponse(
+    Either<AppException, PaginatedResponse<dynamic>> response,
+  ) {
+    response.fold((failure) {
+      state = state.copyWith(
+        state: DashboardConcreteState.failure,
+        message: failure.message,
+        isLoading: false,
+      );
+    }, (data) {
+      final productList=data.data.map((e)=>Product.fromJson(e)).toList();
+    });
   }
 }
