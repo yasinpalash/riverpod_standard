@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/features/dashboard/presentation/providers/state/dashboard_state.dart';
+import '../../../../../shared/globals.dart';
 import '../../../domain/repositories/dashboard_repository.dart';
 
 class DashboardNotifier extends StateNotifier<DashboardState> {
@@ -7,4 +8,31 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
 
   DashboardNotifier(this.dashboardRepository)
     : super(const DashboardState.initial());
+  bool get isFetching =>
+      state.state != DashboardConcreteState.loading &&
+      state.state != DashboardConcreteState.fetchingMore;
+
+  Future<void> fetchProducts() async {
+    if (isFetching &&
+        state.state != DashboardConcreteState.fetchedAllProducts) {
+      state = state.copyWith(
+        state:
+            state.page > 0
+                ? DashboardConcreteState.fetchingMore
+                : DashboardConcreteState.loading,
+        isLoading: true,
+      );
+
+      final response = await dashboardRepository.fetchProducts(
+          skip: state.page * PRODUCTS_PER_PAGE);
+     // updateStateFromResponse(response);
+
+    }else{
+      state = state.copyWith(
+        state: DashboardConcreteState.fetchedAllProducts,
+        message: 'No more products available',
+        isLoading: false,
+      );
+    }
+  }
 }
