@@ -30,7 +30,7 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
       final response = await dashboardRepository.fetchProducts(
         skip: state.page * PRODUCTS_PER_PAGE,
       );
-      // updateStateFromResponse(response);
+      updateStateFromResponse(response);
     } else {
       state = state.copyWith(
         state: DashboardConcreteState.fetchedAllProducts,
@@ -43,14 +43,34 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
   void updateStateFromResponse(
     Either<AppException, PaginatedResponse<dynamic>> response,
   ) {
-    response.fold((failure) {
-      state = state.copyWith(
-        state: DashboardConcreteState.failure,
-        message: failure.message,
-        isLoading: false,
-      );
-    }, (data) {
-      final productList=data.data.map((e)=>Product.fromJson(e)).toList();
-    });
+    response.fold(
+      (failure) {
+        state = state.copyWith(
+          state: DashboardConcreteState.failure,
+          message: failure.message,
+          isLoading: false,
+        );
+      },
+      (data) {
+        final productList = data.data.map((e) => Product.fromJson(e)).toList();
+        final totalProducts = [...state.productList, ...productList];
+        state = state.copyWith(
+          productList: totalProducts,
+          state:
+              totalProducts.length == data.total
+                  ? DashboardConcreteState.fetchedAllProducts
+                  : DashboardConcreteState.loaded,
+          hasData: true,
+          message: totalProducts.isEmpty ? 'No products found' : '',
+          page: totalProducts.length ~/ PRODUCTS_PER_PAGE,
+          total: data.total,
+          isLoading: false,
+        );
+      },
+    );
+  }
+
+  void resetState() {
+    state = const DashboardState.initial();
   }
 }
