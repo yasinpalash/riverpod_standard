@@ -1,6 +1,8 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_standard/features/dashboard/presentation/providers/dashboard_state_provider.dart';
+import 'package:riverpod_standard/features/dashboard/presentation/providers/state/dashboard_state.dart';
 
 import '../widgets/dashboard_drawer.dart';
 
@@ -23,7 +25,20 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(dashboardNotifierProvider);
 
+    ref.listen(dashboardNotifierProvider.select((value) => value), ((
+      DashboardState? previous,
+      DashboardState next,
+    ) {
+      if (next.state == DashboardConcreteState.fetchedAllProducts) {
+        if (next.message.isNotEmpty) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(next.message.toString())));
+        }
+      }
+    }));
     final totalSales = ref.watch(totalSalesProvider);
     final totalOrders = ref.watch(totalOrdersProvider);
     final totalCustomers = ref.watch(totalCustomersProvider);
