@@ -40,6 +40,32 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
     }
   }
 
+  Future<void> searchProducts(String query) async {
+    if (isFetching &&
+        state.state != DashboardConcreteState.fetchedAllProducts) {
+      state = state.copyWith(
+        state:
+            state.page > 0
+                ? DashboardConcreteState.fetchingMore
+                : DashboardConcreteState.loading,
+        isLoading: true,
+      );
+
+      final response = await dashboardRepository.searchProducts(
+        skip: state.page * PRODUCTS_PER_PAGE,
+        query: query,
+      );
+
+      updateStateFromResponse(response);
+    } else {
+      state = state.copyWith(
+        state: DashboardConcreteState.fetchedAllProducts,
+        message: 'No more products available',
+        isLoading: false,
+      );
+    }
+  }
+
   void updateStateFromResponse(
     Either<AppException, PaginatedResponse<dynamic>> response,
   ) {
