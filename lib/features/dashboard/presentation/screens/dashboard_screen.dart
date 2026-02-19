@@ -23,6 +23,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+
     final totalSales = ref.watch(totalSalesProvider);
     final totalOrders = ref.watch(totalOrdersProvider);
     final totalCustomers = ref.watch(totalCustomersProvider);
