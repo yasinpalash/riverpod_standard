@@ -47,6 +47,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     scrollController.removeListener(scrollControllerListener);
     scrollController.addListener(scrollControllerListener);
   }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(dashboardNotifierProvider);
@@ -108,13 +109,64 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         ],
       ),
       drawer: const DashboardDrawer(),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [],
-        ),
-      ),
+      body:
+          state.state == DashboardConcreteState.loading
+              ? const Center(child: CircularProgressIndicator())
+              : state.hasData
+              ? Column(
+                children: [
+                  Expanded(
+                    child: Scrollbar(
+                      controller: scrollController,
+                      child: ListView.separated(
+                        controller: scrollController,
+                        itemBuilder: (context, index) {
+                          final product = state.productList[index];
+                          return ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(product.thumbnail),
+                            ),
+                            title: Text(
+                              product.title,
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            trailing: Text(
+                              '\$${product.price}',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            subtitle: Text(
+                              product.description,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          );
+                        },
+                        separatorBuilder: (_, __) => const Divider(),
+                        itemCount: state.productList.length,
+                      ),
+                    ),
+                  ),
+                  if (state.state == DashboardConcreteState.fetchingMore)
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                ],
+              )
+              : Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                  child: Text(
+                    state.message,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
     );
   }
 
