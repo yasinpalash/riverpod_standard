@@ -21,6 +21,33 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   Timer? _debounce;
   final TextEditingController searchController = TextEditingController();
   @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(scrollControllerListener);
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void scrollControllerListener() {
+    if (scrollController.position.maxScrollExtent == scrollController.offset) {
+      final notifier = ref.read(dashboardNotifierProvider.notifier);
+      if (isSearchActive) {
+        notifier.searchProducts(searchController.text);
+      } else {
+        notifier.fetchProducts();
+      }
+    }
+  }
+
+  void refreshScrollControllerListener() {
+    scrollController.removeListener(scrollControllerListener);
+    scrollController.addListener(scrollControllerListener);
+  }
+  @override
   Widget build(BuildContext context) {
     final state = ref.watch(dashboardNotifierProvider);
 
@@ -65,7 +92,17 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 : const Text("Dashboard"),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              searchController.clear();
+              setState(() {
+                isSearchActive = !isSearchActive;
+              });
+              ref.read(dashboardNotifierProvider.notifier).resetState();
+              if (!isSearchActive) {
+                ref.read(dashboardNotifierProvider.notifier).fetchProducts();
+              }
+              refreshScrollControllerListener();
+            },
             icon: Icon(isSearchActive ? Icons.clear : Icons.search),
           ),
         ],
