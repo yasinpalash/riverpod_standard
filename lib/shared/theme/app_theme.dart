@@ -6,6 +6,7 @@ import 'package:riverpod_standard/shared/theme/text_theme.dart';
 import '../domain/providers/shared_preferences_storage_service_provider.dart';
 import '../globals.dart';
 import 'app_colors.dart';
+import 'custom_themes/app_bar_theme.dart';
 
 final appThemeProvider = StateNotifierProvider<AppThemeModeNotifier, ThemeMode>(
   (ref) {
@@ -36,7 +37,6 @@ class AppThemeModeNotifier extends StateNotifier<ThemeMode> {
 class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
-      // iconTheme: IconThemeData(color: Colors.red),
       brightness: Brightness.dark,
       fontFamily: AppTextStyles.fontFamily,
       colorScheme: const ColorScheme.dark(
@@ -52,18 +52,12 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.black,
       textTheme: TextThemes.darkTextTheme,
       primaryTextTheme: TextThemes.primaryTextTheme,
-      appBarTheme: AppBarTheme(
-        elevation: 0,
-        backgroundColor: AppColors.black,
-        titleTextStyle: AppTextStyles.h2.copyWith(color: AppColors.white),
-        iconTheme: const IconThemeData(color: AppColors.white),
-      ),
+      appBarTheme: AppBarForTheme.darkAppBarTheme,
     );
   }
 
   static ThemeData get lightTheme {
     return ThemeData(
-      //iconTheme: IconThemeData(color: Colors.green),
       brightness: Brightness.light,
       fontFamily: AppTextStyles.fontFamily,
       colorScheme: const ColorScheme.light(
@@ -79,12 +73,7 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.white,
       textTheme: TextThemes.lightTextTheme,
       primaryTextTheme: TextThemes.primaryTextTheme,
-      appBarTheme: AppBarTheme(
-        elevation: 0,
-        backgroundColor: AppColors.primary,
-        titleTextStyle: AppTextStyles.h2.copyWith(color: AppColors.white),
-        iconTheme: const IconThemeData(color: AppColors.white),
-      ),
+      appBarTheme: AppBarForTheme.lightAppBarTheme,
     );
   }
 }
