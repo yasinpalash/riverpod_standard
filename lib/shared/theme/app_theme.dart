@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/shared/data/local/storage_service.dart';
 import 'package:riverpod_standard/shared/theme/text_styles.dart';
 import 'package:riverpod_standard/shared/theme/text_theme.dart';
+import '../../core/constants /app_colors.dart';
 import '../domain/providers/shared_preferences_storage_service_provider.dart';
 import '../globals.dart';
-import 'app_colors.dart';
 import 'custom_themes/app_bar_theme.dart';
 
 final appThemeProvider = StateNotifierProvider<AppThemeModeNotifier, ThemeMode>(
