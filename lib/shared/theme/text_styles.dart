@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTextStyles {
-  static const String fontFamily = 'Helvetica';
+  static final String? fontFamily = GoogleFonts.roboto().fontFamily;
 
   static const TextStyle bodyLg = TextStyle(
     fontSize: 16,

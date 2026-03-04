@@ -23,6 +23,7 @@ dependencies:
   json_annotation: ^4.7.0
   shared_preferences: ^2.0.17
   state_notifier: ^0.7.2+1
+  google_fonts: ^8.0.2
 
 dev_dependencies:
   auto_route_generator: ^7.1.1
