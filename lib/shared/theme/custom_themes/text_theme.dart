@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:riverpod_standard/shared/theme/custom_themes/text_styles.dart';
 import '../../../core/constants /app_colors.dart';
-
+import 'app_text_styles.dart';
 
 class TextThemes {
   static TextTheme get baseTextTheme {
@@ -44,4 +43,3 @@ class TextThemes {
     );
   }
 }
-
