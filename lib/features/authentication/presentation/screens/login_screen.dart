@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/features/authentication/presentation/providers/auth_providers.dart';
 import 'package:riverpod_standard/features/authentication/presentation/providers/state/auth_state.dart';
-import '../../../../routes/app_route.dart';
+import '../../../../core/routes/app_route.dart';
 import '../widgets/auth_field.dart';
 
 @RoutePage()
