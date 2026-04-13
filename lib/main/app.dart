@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../routes/app_route.dart';
-import '../shared/theme/app_theme.dart';
+import '../core/theme/app_theme.dart';
 
 class MyApp extends ConsumerWidget {
   MyApp({super.key});
@@ -12,7 +12,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(appThemeProvider);
     return MaterialApp.router(
-      title: "Test-Driven Development ",
+      title: "Test-Driven Development",
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/routes/app_route.dart';
 import 'package:riverpod_standard/services/user_cache_service/domain/providers/current_user_provider.dart';
 import 'package:riverpod_standard/services/user_cache_service/domain/providers/user_cache_provider.dart';
-import '../../../../shared/theme/app_theme.dart';
+import '../../../../core/theme/app_theme.dart';
 
 class DashboardDrawer extends ConsumerWidget {
   const DashboardDrawer({super.key});

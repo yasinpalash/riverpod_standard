@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-
   static const Color primary = Color(0xff1DA1F2);
   static const Color black = Color(0xff14171A);
   static const Color white = Color(0xffffffff);
@@ -14,16 +13,11 @@ class AppColors {
   static const Color darkScaffoldBackgroundColor = Color(0xFF121212);
   static const Color accent = Color(0xFF89A7FF);
 
-
   // Gradient Colors
   static const Gradient linearGradient = LinearGradient(
     begin: Alignment(0.0, 0.0),
     end: Alignment(0.707, -0.707),
-    colors: [
-      Color(0xfffffa9e),
-      Color(0xFFFAD0C4),
-      Color(0xFFFAD0C4),
-    ],
+    colors: [Color(0xfffffa9e), Color(0xFFFAD0C4), Color(0xFFFAD0C4)],
   );
 
   // Text Colors

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/shared/data/local/storage_service.dart';
-import 'package:riverpod_standard/shared/theme/custom_themes/text_theme.dart';
-import '../../core/constants /app_colors.dart';
-import '../domain/providers/shared_preferences_storage_service_provider.dart';
-import '../globals.dart';
+import '../constants /app_colors.dart';
+import '../../shared/domain/providers/shared_preferences_storage_service_provider.dart';
+import '../../shared/globals.dart';
 import 'custom_themes/app_bar_theme.dart';
 import 'custom_themes/app_text_styles.dart';
 import 'custom_themes/elevated_button_theme.dart';
 import 'custom_themes/text_field_theme.dart';
+import 'custom_themes/text_theme.dart';
 
 final appThemeProvider = StateNotifierProvider<AppThemeModeNotifier, ThemeMode>(
   (ref) {
