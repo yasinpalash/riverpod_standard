@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:riverpod_standard/shared/domain/models/either.dart';
 import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
-import '../domain/models/response.dart' as response;
 import 'package:riverpod_standard/shared/data/remote/remote.dart';
+import '../../../shared/domain/models/response.dart' as response;
 
 
 
