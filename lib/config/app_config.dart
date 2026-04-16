@@ -1,4 +1,4 @@
-import '../core/constants /enums.dart';
+import 'app_environment.dart';
 
 class AppConfig {
   const AppConfig({
@@ -17,5 +17,3 @@ class AppConfig {
   bool get isStaging => environment == AppEnvironment.staging;
   bool get isProd => environment == AppEnvironment.prod;
 }
-
-//static String baseUrl = 'https://dummyjson.com';

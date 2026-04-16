@@ -1,4 +1,6 @@
-import '../main.dart';
-import 'app_env.dart';
+import '../config/flavors/staging_config.dart';
+import 'bootstrap.dart';
 
-Future<void> main() async => mainCommon(AppEnvironment.STAGING);
+Future<void> main() async {
+  await bootstrap(stagingConfig);
+}

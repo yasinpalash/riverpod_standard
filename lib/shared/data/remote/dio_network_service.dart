@@ -1,30 +1,36 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_standard/shared/data/remote/network_service.dart';
 import 'package:riverpod_standard/shared/domain/models/either.dart';
 import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
-import '../../../config/app_config.dart';
 import '../../../core/utils/mixins/exception_handler_mixin.dart';
 import '../../domain/models/response.dart' as response;
 import '../../globals.dart';
 
 class DioNetworkService extends NetworkService with ExceptionHandlerMixin {
-  final Dio dio;
-  DioNetworkService(this.dio) {
+  DioNetworkService(
+    this.dio, {
+    required this.baseUrl,
+    required this.enableLogging,
+  }) {
     if (!kTestMode) {
       dio.options = dioBaseOptions;
-      if (kDebugMode) {
+      if (enableLogging) {
         dio.interceptors.add(
           LogInterceptor(requestBody: true, responseBody: true),
         );
       }
     }
   }
+
+  final Dio dio;
+  final bool enableLogging;
+
   BaseOptions get dioBaseOptions =>
       BaseOptions(baseUrl: baseUrl, headers: headers);
 
   @override
-  String get baseUrl => AppConfig.baseUrl;
+  final String baseUrl;
+
   @override
   Map<String, Object> get headers => {
     'accept': 'application/json',

@@ -1,5 +1,5 @@
 import 'package:riverpod_standard/config/app_config.dart';
-import 'package:riverpod_standard/core/constants%20/enums.dart';
+import 'package:riverpod_standard/config/app_environment.dart';
 
 const AppConfig devConfig = AppConfig(
   environment: AppEnvironment.dev,

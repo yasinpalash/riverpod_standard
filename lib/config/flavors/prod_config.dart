@@ -1,5 +1,5 @@
-import '../../core/constants /enums.dart';
 import '../app_config.dart';
+import '../app_environment.dart';
 
 const AppConfig prodConfig = AppConfig(
   environment: AppEnvironment.prod,
