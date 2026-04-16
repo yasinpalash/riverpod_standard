@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:riverpod_standard/shared/data/remote/network_service.dart';
 import 'package:riverpod_standard/shared/domain/models/either.dart';
 import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
-import '../../../configs/app_configs.dart';
+import '../../../config/app_configs.dart';
 import '../../../core/utils/mixins/exception_handler_mixin.dart';
 import '../../domain/models/response.dart' as response;
 import '../../globals.dart';
