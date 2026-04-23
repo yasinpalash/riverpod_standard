@@ -1,6 +1,3 @@
-import 'config/flavors/prod_config.dart';
-import 'main/bootstrap.dart';
+import 'main/main_prod.dart' as prod;
 
-Future<void> main() async {
-  await bootstrap(prodConfig);
-}
+Future<void> main() => prod.main();

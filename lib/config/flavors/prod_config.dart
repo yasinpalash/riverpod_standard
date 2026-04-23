@@ -6,4 +6,6 @@ const AppConfig prodConfig = AppConfig(
   appName: 'Riverpod Standard',
   baseUrl: 'https://dummyjson.com',
   enableLogging: false,
+  connectTimeout: Duration(seconds: 15),
+  receiveTimeout: Duration(seconds: 15),
 );

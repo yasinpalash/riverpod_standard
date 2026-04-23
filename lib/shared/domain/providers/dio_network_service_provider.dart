@@ -11,5 +11,7 @@ final networkServiceProvider = Provider<DioNetworkService>((ref) {
     dio,
     baseUrl: appConfig.baseUrl,
     enableLogging: appConfig.enableLogging,
+    connectTimeout: appConfig.connectTimeout,
+    receiveTimeout: appConfig.receiveTimeout,
   );
 });

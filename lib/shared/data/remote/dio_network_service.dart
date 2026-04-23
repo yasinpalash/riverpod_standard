@@ -11,6 +11,8 @@ class DioNetworkService extends NetworkService with ExceptionHandlerMixin {
     this.dio, {
     required this.baseUrl,
     required this.enableLogging,
+    required this.connectTimeout,
+    required this.receiveTimeout,
   }) {
     if (!kTestMode) {
       dio.options = dioBaseOptions;
@@ -24,9 +26,15 @@ class DioNetworkService extends NetworkService with ExceptionHandlerMixin {
 
   final Dio dio;
   final bool enableLogging;
+  final Duration connectTimeout;
+  final Duration receiveTimeout;
 
-  BaseOptions get dioBaseOptions =>
-      BaseOptions(baseUrl: baseUrl, headers: headers);
+  BaseOptions get dioBaseOptions => BaseOptions(
+    baseUrl: baseUrl,
+    headers: headers,
+    connectTimeout: connectTimeout,
+    receiveTimeout: receiveTimeout,
+  );
 
   @override
   final String baseUrl;
