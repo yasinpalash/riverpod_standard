@@ -1,4 +1,6 @@
-import '../main.dart';
-import 'app_env.dart';
+import '../config/flavors/dev_config.dart';
+import 'bootstrap.dart';
 
-Future<void> main() async => mainCommon(AppEnvironment.DEV);
+Future<void> main() async {
+  await bootstrap(devConfig);
+}

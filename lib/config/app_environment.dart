@@ -1,4 +1,4 @@
-import '../core/constants /enums.dart';
+enum AppEnvironment { dev, staging, prod }
 
 extension AppEnvironmentX on AppEnvironment {
   String get name {
