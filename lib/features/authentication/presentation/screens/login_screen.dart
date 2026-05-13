@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_standard/core/constants%20/route_constants.dart';
 import 'package:riverpod_standard/features/authentication/presentation/providers/auth_providers.dart';
 import 'package:riverpod_standard/features/authentication/presentation/providers/state/auth_state.dart';
 import '../../../../core/routes/app_route.dart';
@@ -8,7 +9,7 @@ import '../widgets/auth_field.dart';
 
 @RoutePage()
 class LoginScreen extends ConsumerWidget {
-  static const routeName = '/loginScreen';
+  static const routeName = RouteConstants.login;
   LoginScreen({super.key});
 
   final TextEditingController usernameController = TextEditingController(
