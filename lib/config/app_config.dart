@@ -47,7 +47,7 @@ class AppConfig {
 const AppConfig devConfig = AppConfig(
   environment: AppEnvironment.dev,
   appName: 'Riverpod Standard Dev',
-  baseUrl: 'https://dummyjson-dev.com',
+  baseUrl: 'https://dummyjson.com',
   enableLogging: true,
   connectTimeout: Duration(seconds: 20),
   receiveTimeout: Duration(seconds: 20),
