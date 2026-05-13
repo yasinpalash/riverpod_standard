@@ -40,7 +40,7 @@ class LoginScreen extends ConsumerWidget {
       } else if (next is Success) {
         AutoRouter.of(
           context,
-        ).pushAndPopUntil(const DashboardRoute(), predicate: (_) => false);
+        ).pushAndPopUntil(const HomeRoute(), predicate: (_) => false);
       }
     }));
 

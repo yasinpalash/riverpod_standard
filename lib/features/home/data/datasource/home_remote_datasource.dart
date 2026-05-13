@@ -5,7 +5,7 @@ import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
 import '../../../../shared/data/remote/network_service.dart';
 import '../../../../shared/globals.dart';
 
-abstract class DashboardDatasource {
+abstract class HomeDatasource {
   Future<Either<AppException, PaginatedResponse>> fetchPaginatedProducts({
     required int skip,
   });
@@ -15,9 +15,9 @@ abstract class DashboardDatasource {
   });
 }
 
-class DashboardRemoteDatasource extends DashboardDatasource {
+class HomeRemoteDatasource extends HomeDatasource {
   final NetworkService networkService;
-  DashboardRemoteDatasource(this.networkService);
+  HomeRemoteDatasource(this.networkService);
 
   @override
   Future<Either<AppException, PaginatedResponse>> fetchPaginatedProducts({
