@@ -1,9 +1,9 @@
 import 'dart:convert';
+import '../../../../core/constants /storage_keys.dart';
 import '../../../../shared/data/local/storage_service.dart';
 import '../../../../shared/domain/models/either.dart';
 import '../../../../shared/domain/models/user/user_model.dart';
 import '../../../../shared/exceptions/http_exception.dart';
-import '../../../../shared/globals.dart';
 
 abstract class UserDataSource {
   String get storageKey;
@@ -19,7 +19,7 @@ class UserLocalDatasource extends UserDataSource {
   final StorageService storageService;
 
   @override
-  String get storageKey => USER_LOCAL_STORAGE_KEY;
+  String get storageKey => StorageKeys.user;
 
   @override
   Future<Either<AppException, User>> fetchUser() async {

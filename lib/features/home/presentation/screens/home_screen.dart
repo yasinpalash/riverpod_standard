@@ -2,13 +2,14 @@ import 'dart:async';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_standard/core/constants%20/route_constants.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/home_state_provider.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/state/home_state.dart';
 import '../widgets/home_drawer.dart';
 
 @RoutePage()
 class HomeScreen extends ConsumerStatefulWidget {
-  static const String routeName = 'HomeScreen';
+  static const String routeName = RouteConstants.home;
   const HomeScreen({super.key});
 
   @override
