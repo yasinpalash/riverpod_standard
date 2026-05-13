@@ -1,39 +1,37 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_standard/features/dashboard/presentation/providers/state/dashboard_state.dart';
+import 'package:riverpod_standard/features/home/presentation/providers/state/home_state.dart';
 import 'package:riverpod_standard/shared/domain/models/either.dart';
 import 'package:riverpod_standard/shared/domain/models/paginated_response.dart';
 import 'package:riverpod_standard/shared/domain/models/product/product_model.dart';
 import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
 import '../../../../../shared/globals.dart';
-import '../../../domain/repositories/dashboard_repository.dart';
+import '../../../domain/repositories/home_repository.dart';
 
-class DashboardNotifier extends StateNotifier<DashboardState> {
-  final DashboardRepository dashboardRepository;
+class HomeNotifier extends StateNotifier<HomeState> {
+  final HomeRepository homeRepository;
 
-  DashboardNotifier(this.dashboardRepository)
-    : super(const DashboardState.initial());
+  HomeNotifier(this.homeRepository) : super(const HomeState.initial());
   bool get isFetching =>
-      state.state != DashboardConcreteState.loading &&
-      state.state != DashboardConcreteState.fetchingMore;
+      state.state != HomeConcreteState.loading &&
+      state.state != HomeConcreteState.fetchingMore;
 
   Future<void> fetchProducts() async {
-    if (isFetching &&
-        state.state != DashboardConcreteState.fetchedAllProducts) {
+    if (isFetching && state.state != HomeConcreteState.fetchedAllProducts) {
       state = state.copyWith(
         state:
             state.page > 0
-                ? DashboardConcreteState.fetchingMore
-                : DashboardConcreteState.loading,
+                ? HomeConcreteState.fetchingMore
+                : HomeConcreteState.loading,
         isLoading: true,
       );
 
-      final response = await dashboardRepository.fetchProducts(
+      final response = await homeRepository.fetchProducts(
         skip: state.page * PRODUCTS_PER_PAGE,
       );
       updateStateFromResponse(response);
     } else {
       state = state.copyWith(
-        state: DashboardConcreteState.fetchedAllProducts,
+        state: HomeConcreteState.fetchedAllProducts,
         message: 'No more products available',
         isLoading: false,
       );
@@ -41,17 +39,16 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
   }
 
   Future<void> searchProducts(String query) async {
-    if (isFetching &&
-        state.state != DashboardConcreteState.fetchedAllProducts) {
+    if (isFetching && state.state != HomeConcreteState.fetchedAllProducts) {
       state = state.copyWith(
         state:
             state.page > 0
-                ? DashboardConcreteState.fetchingMore
-                : DashboardConcreteState.loading,
+                ? HomeConcreteState.fetchingMore
+                : HomeConcreteState.loading,
         isLoading: true,
       );
 
-      final response = await dashboardRepository.searchProducts(
+      final response = await homeRepository.searchProducts(
         skip: state.page * PRODUCTS_PER_PAGE,
         query: query,
       );
@@ -59,7 +56,7 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
       updateStateFromResponse(response);
     } else {
       state = state.copyWith(
-        state: DashboardConcreteState.fetchedAllProducts,
+        state: HomeConcreteState.fetchedAllProducts,
         message: 'No more products available',
         isLoading: false,
       );
@@ -72,7 +69,7 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
     response.fold(
       (failure) {
         state = state.copyWith(
-          state: DashboardConcreteState.failure,
+          state: HomeConcreteState.failure,
           message: failure.message,
           isLoading: false,
         );
@@ -84,8 +81,8 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
           productList: totalProducts,
           state:
               totalProducts.length == data.total
-                  ? DashboardConcreteState.fetchedAllProducts
-                  : DashboardConcreteState.loaded,
+                  ? HomeConcreteState.fetchedAllProducts
+                  : HomeConcreteState.loaded,
           hasData: true,
           message: totalProducts.isEmpty ? 'No products found' : '',
           page: totalProducts.length ~/ PRODUCTS_PER_PAGE,
@@ -97,6 +94,6 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
   }
 
   void resetState() {
-    state = const DashboardState.initial();
+    state = const HomeState.initial();
   }
 }

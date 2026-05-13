@@ -1,7 +1,5 @@
+import 'package:riverpod_standard/config/app_config.dart';
 import 'package:riverpod_standard/config/app_environment.dart';
-import 'package:riverpod_standard/config/flavors/dev_config.dart';
-import 'package:riverpod_standard/config/flavors/prod_config.dart';
-import 'package:riverpod_standard/config/flavors/staging_config.dart';
 import 'package:test/test.dart';
 
 void main() {

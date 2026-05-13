@@ -2,20 +2,21 @@ import 'dart:async';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_standard/features/dashboard/presentation/providers/dashboard_state_provider.dart';
-import 'package:riverpod_standard/features/dashboard/presentation/providers/state/dashboard_state.dart';
-import '../widgets/dashboard_drawer.dart';
+import 'package:riverpod_standard/core/constants%20/route_constants.dart';
+import 'package:riverpod_standard/features/home/presentation/providers/home_state_provider.dart';
+import 'package:riverpod_standard/features/home/presentation/providers/state/home_state.dart';
+import '../widgets/home_drawer.dart';
 
 @RoutePage()
-class DashboardScreen extends ConsumerStatefulWidget {
-  static const String routeName = 'DashboardScreen';
-  const DashboardScreen({super.key});
+class HomeScreen extends ConsumerStatefulWidget {
+  static const String routeName = RouteConstants.home;
+  const HomeScreen({super.key});
 
   @override
-  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   final scrollController = ScrollController();
   bool isSearchActive = false;
   Timer? _debounce;
@@ -34,7 +35,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   void scrollControllerListener() {
     if (scrollController.position.maxScrollExtent == scrollController.offset) {
-      final notifier = ref.read(dashboardNotifierProvider.notifier);
+      final notifier = ref.read(homeNotifierProvider.notifier);
       if (isSearchActive) {
         notifier.searchProducts(searchController.text);
       } else {
@@ -50,13 +51,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(dashboardNotifierProvider);
+    final state = ref.watch(homeNotifierProvider);
 
-    ref.listen(dashboardNotifierProvider.select((value) => value), ((
-      DashboardState? previous,
-      DashboardState next,
+    ref.listen(homeNotifierProvider.select((value) => value), ((
+      HomeState? previous,
+      HomeState next,
     ) {
-      if (next.state == DashboardConcreteState.fetchedAllProducts) {
+      if (next.state == HomeConcreteState.fetchedAllProducts) {
         if (next.message.isNotEmpty) {
           ScaffoldMessenger.of(
             context,
@@ -90,7 +91,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   controller: searchController,
                   onChanged: _onSearchChanged,
                 )
-                : const Text("Dashboard"),
+                : const Text("Home"),
         actions: [
           IconButton(
             onPressed: () {
@@ -98,9 +99,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               setState(() {
                 isSearchActive = !isSearchActive;
               });
-              ref.read(dashboardNotifierProvider.notifier).resetState();
+              ref.read(homeNotifierProvider.notifier).resetState();
               if (!isSearchActive) {
-                ref.read(dashboardNotifierProvider.notifier).fetchProducts();
+                ref.read(homeNotifierProvider.notifier).fetchProducts();
               }
               refreshScrollControllerListener();
             },
@@ -108,9 +109,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           ),
         ],
       ),
-      drawer: const DashboardDrawer(),
+      drawer: const HomeDrawer(),
       body:
-          state.state == DashboardConcreteState.loading
+          state.state == HomeConcreteState.loading
               ? const Center(child: CircularProgressIndicator())
               : state.hasData
               ? Column(
@@ -147,7 +148,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       ),
                     ),
                   ),
-                  if (state.state == DashboardConcreteState.fetchingMore)
+                  if (state.state == HomeConcreteState.fetchingMore)
                     const Padding(
                       padding: EdgeInsets.only(bottom: 16.0),
                       child: CircularProgressIndicator(),
@@ -173,7 +174,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      ref.read(dashboardNotifierProvider.notifier).searchProducts(query);
+      ref.read(homeNotifierProvider.notifier).searchProducts(query);
     });
   }
 }

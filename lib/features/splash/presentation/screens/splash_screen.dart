@@ -1,13 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_standard/core/constants%20/route_constants.dart';
 import 'package:riverpod_standard/features/splash/presentation/providers/splash_provider.dart';
-
 import '../../../../core/routes/app_route.dart';
 
 @RoutePage()
 class SplashScreen extends ConsumerStatefulWidget {
-  static const String routeName = '/splashScreen';
+  static const String routeName = RouteConstants.splash;
   const SplashScreen({super.key});
 
   @override
@@ -21,9 +21,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     Future.delayed(const Duration(seconds: 2), () async {
       final isUserLoggedIn = await ref.read(userLoginCheckProvider.future);
       final route =
-          isUserLoggedIn
-              ? const DashboardRoute()
-              :  LoginRoute() as PageRouteInfo;
+          isUserLoggedIn ? const HomeRoute() : LoginRoute() as PageRouteInfo;
 
       // ignore: use_build_context_synchronously
       AutoRouter.of(context).pushAndPopUntil(route, predicate: (_) => false);

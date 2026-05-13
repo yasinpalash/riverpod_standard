@@ -6,12 +6,12 @@ import 'package:riverpod_standard/services/user_cache_service/domain/providers/u
 import '../../../../core/routes/app_route.dart';
 import '../../../../core/theme/app_theme.dart';
 
-class DashboardDrawer extends ConsumerWidget {
-  const DashboardDrawer({super.key});
+class HomeDrawer extends ConsumerWidget {
+  const HomeDrawer({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentUser=ref.watch(currentUserProvider).asData?.value;
+    final currentUser = ref.watch(currentUserProvider).asData?.value;
     return SafeArea(
       bottom: false,
       child: Drawer(
@@ -37,8 +37,10 @@ class DashboardDrawer extends ConsumerWidget {
                 InkWell(
                   onTap: () async {
                     await ref.read(userLocalRepositoryProvider).deleteUser();
-                    // ignore: use_build_context_synchronously
-                    AutoRouter.of(context,).pushAndPopUntil(LoginRoute(), predicate: (_) => false);
+                    if (!context.mounted) return;
+                    AutoRouter.of(
+                      context,
+                    ).pushAndPopUntil(LoginRoute(), predicate: (_) => false);
                   },
                   child: CircleAvatar(
                     child: Icon(

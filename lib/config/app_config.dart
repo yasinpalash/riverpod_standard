@@ -43,3 +43,30 @@ class AppConfig {
     }
   }
 }
+
+const AppConfig devConfig = AppConfig(
+  environment: AppEnvironment.dev,
+  appName: 'Riverpod Standard Dev',
+  baseUrl: 'https://dummyjson.com',
+  enableLogging: true,
+  connectTimeout: Duration(seconds: 20),
+  receiveTimeout: Duration(seconds: 20),
+);
+
+const AppConfig stagingConfig = AppConfig(
+  environment: AppEnvironment.staging,
+  appName: 'Riverpod Standard Staging',
+  baseUrl: 'https://dummyjson-stage.com',
+  enableLogging: true,
+  connectTimeout: Duration(seconds: 20),
+  receiveTimeout: Duration(seconds: 20),
+);
+
+const AppConfig prodConfig = AppConfig(
+  environment: AppEnvironment.prod,
+  appName: 'Riverpod Standard',
+  baseUrl: 'https://dummyjson.com',
+  enableLogging: false,
+  connectTimeout: Duration(seconds: 15),
+  receiveTimeout: Duration(seconds: 15),
+);

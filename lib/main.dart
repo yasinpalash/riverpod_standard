@@ -1,3 +1,3 @@
-import 'main/main_prod.dart' as prod;
+import 'flavors/main_dev.dart' as dev;
 
-Future<void> main() => prod.main();
+Future<void> main() => dev.main();
