@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:riverpod_standard/core/constants%20/app_colors.dart';
+import 'package:riverpod_standard/core/constants/app_colors.dart';
 
 class AppElevatedButtonTheme {
   AppElevatedButtonTheme._();

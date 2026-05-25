@@ -26,7 +26,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
       );
 
       final response = await homeRepository.fetchProducts(
-        skip: state.page * PRODUCTS_PER_PAGE,
+        skip: state.page * productsPerPage,
       );
       updateStateFromResponse(response);
     } else {
@@ -49,7 +49,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
       );
 
       final response = await homeRepository.searchProducts(
-        skip: state.page * PRODUCTS_PER_PAGE,
+        skip: state.page * productsPerPage,
         query: query,
       );
 
@@ -85,7 +85,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
                   : HomeConcreteState.loaded,
           hasData: true,
           message: totalProducts.isEmpty ? 'No products found' : '',
-          page: totalProducts.length ~/ PRODUCTS_PER_PAGE,
+          page: totalProducts.length ~/ productsPerPage,
           total: data.total,
           isLoading: false,
         );

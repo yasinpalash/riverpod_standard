@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_standard/core/constants%20/route_constants.dart';
+import 'package:riverpod_standard/core/constants/route_constants.dart';
 import 'package:riverpod_standard/features/splash/presentation/providers/splash_provider.dart';
 import '../../../../core/routes/app_route.dart';
 

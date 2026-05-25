@@ -2,7 +2,8 @@ import 'dart:async';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_standard/core/constants%20/route_constants.dart';
+import 'package:riverpod_standard/core/constants/route_constants.dart';
+import 'package:riverpod_standard/core/utils/utils.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/home_state_provider.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/state/home_state.dart';
 import '../widgets/home_drawer.dart';
@@ -30,6 +31,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void dispose() {
     _debounce?.cancel();
+    scrollController.dispose();
+    searchController.dispose();
     super.dispose();
   }
 
@@ -58,10 +61,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       HomeState next,
     ) {
       if (next.state == HomeConcreteState.fetchedAllProducts) {
-        if (next.message.isNotEmpty) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(next.message.toString())));
+        if (next.message.isNotBlank) {
+          context.showSnackBar(next.message);
         }
       }
     }));

@@ -1,17 +1,24 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_standard/core/constants%20/route_constants.dart';
+import 'package:riverpod_standard/core/constants/route_constants.dart';
+import 'package:riverpod_standard/core/utils/utils.dart';
 import 'package:riverpod_standard/features/authentication/presentation/providers/auth_providers.dart';
 import 'package:riverpod_standard/features/authentication/presentation/providers/state/auth_state.dart';
 import '../../../../core/routes/app_route.dart';
 import '../widgets/auth_field.dart';
 
 @RoutePage()
-class LoginScreen extends ConsumerWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   static const routeName = RouteConstants.login;
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
+  @override
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController usernameController = TextEditingController(
     text: 'emilys',
   );
@@ -20,23 +27,21 @@ class LoginScreen extends ConsumerWidget {
   );
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(authStateNotifierProvider);
     ref.listen(authStateNotifierProvider.select((value) => value), ((
       previous,
       next,
     ) {
       if (next is Failure) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(next.exception.message.toString()),
-            backgroundColor: Colors.red.shade400,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        );
+        context.showErrorSnackBar(next.exception.message.toString());
       } else if (next is Success) {
         AutoRouter.of(
           context,
@@ -117,15 +122,27 @@ class LoginScreen extends ConsumerWidget {
                       ),
                       child: Column(
                         children: [
-                          AuthField(
-                            hintText: 'Username',
-                            controller: usernameController,
-                          ),
-                          const SizedBox(height: 16),
-                          AuthField(
-                            hintText: 'Password',
-                            obscureText: true,
-                            controller: passwordController,
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                AuthField(
+                                  hintText: 'Username',
+                                  controller: usernameController,
+                                  validator: AppValidator.validateUsername,
+                                  textInputAction: TextInputAction.next,
+                                ),
+                                const SizedBox(height: 16),
+                                AuthField(
+                                  hintText: 'Password',
+                                  obscureText: true,
+                                  controller: passwordController,
+                                  validator: AppValidator.validatePassword,
+                                  textInputAction: TextInputAction.done,
+                                  onFieldSubmitted: (_) => login(),
+                                ),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 12),
                           state.maybeMap(
@@ -147,7 +164,7 @@ class LoginScreen extends ConsumerWidget {
                                     ),
                                   ),
                                 ),
-                            orElse: () => loginButton(ref),
+                            orElse: loginButton,
                           ),
                         ],
                       ),
@@ -163,7 +180,7 @@ class LoginScreen extends ConsumerWidget {
     );
   }
 
-  Widget loginButton(WidgetRef ref) {
+  Widget loginButton() {
     return Container(
       width: double.infinity,
       height: 56,
@@ -181,14 +198,7 @@ class LoginScreen extends ConsumerWidget {
         ],
       ),
       child: ElevatedButton(
-        onPressed: () {
-          ref
-              .read(authStateNotifierProvider.notifier)
-              .loginUser(
-                usernameController.text.trim(),
-                passwordController.text.trim(),
-              );
-        },
+        onPressed: login,
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
@@ -207,5 +217,19 @@ class LoginScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  void login() {
+    context.dismissKeyboard();
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
+    }
+
+    ref
+        .read(authStateNotifierProvider.notifier)
+        .loginUser(
+          AppHelper.normalizeWhitespace(usernameController.text),
+          passwordController.text.trim(),
+        );
   }
 }

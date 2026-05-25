@@ -1,7 +1,6 @@
 import 'package:riverpod_standard/shared/domain/models/either.dart';
 import 'package:riverpod_standard/shared/domain/models/paginated_response.dart';
 import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
-
 import '../../../../shared/data/remote/network_service.dart';
 import '../../../../shared/globals.dart';
 
@@ -25,7 +24,7 @@ class HomeRemoteDatasource extends HomeDatasource {
   }) async {
     final response = await networkService.get(
       '/products',
-      queryParameters: {'skip': skip, 'limit': PRODUCTS_PER_PAGE},
+      queryParameters: {'skip': skip, 'limit': productsPerPage},
     );
 
     return response.fold((l) => Left(l), (r) {
@@ -54,7 +53,7 @@ class HomeRemoteDatasource extends HomeDatasource {
   }) async {
     final response = await networkService.get(
       '/products/search?q=$query',
-      queryParameters: {'skip': skip, 'limit': PRODUCTS_PER_PAGE},
+      queryParameters: {'skip': skip, 'limit': productsPerPage},
     );
 
     return response.fold((l) => Left(l), (r) {
