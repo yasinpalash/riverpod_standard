@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/shared/data/local/storage_service.dart';
-import '../constants /app_colors.dart';
-import '../constants /storage_keys.dart';
+import '../constants/app_colors.dart';
+import '../constants/storage_keys.dart';
 import '../../shared/domain/providers/shared_preferences_storage_service_provider.dart';
 import 'custom_themes/app_bar_theme.dart';
 import 'custom_themes/app_text_styles.dart';
