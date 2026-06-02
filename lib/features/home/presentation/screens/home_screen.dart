@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/core/constants/route_constants.dart';
 import 'package:riverpod_standard/core/utils/utils.dart';
+import 'package:riverpod_standard/core/widgets/app_error_view.dart';
+import 'package:riverpod_standard/core/widgets/app_loading.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/home_state_provider.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/state/home_state.dart';
 import '../widgets/home_drawer.dart';
@@ -113,7 +115,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       drawer: const HomeDrawer(),
       body:
           state.state == HomeConcreteState.loading
-              ? const Center(child: CircularProgressIndicator())
+              ? const AppLoading()
               : state.hasData
               ? Column(
                 children: [
@@ -152,22 +154,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   if (state.state == HomeConcreteState.fetchingMore)
                     const Padding(
                       padding: EdgeInsets.only(bottom: 16.0),
-                      child: CircularProgressIndicator(),
+                      child: AppLoading(size: 28),
                     ),
                 ],
               )
-              : Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                  child: Text(
-                    state.message,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+              : AppErrorView(
+                title:
+                    state.state == HomeConcreteState.failure
+                        ? 'Something went wrong'
+                        : 'No products found',
+                message:
+                    state.message.isNotBlank
+                        ? state.message
+                        : isSearchActive
+                        ? 'Try a different search keyword.'
+                        : 'Refresh the list and try again.',
+                icon:
+                    state.state == HomeConcreteState.failure
+                        ? Icons.error_outline
+                        : Icons.inventory_2_outlined,
+                iconColor:
+                    state.state == HomeConcreteState.failure
+                        ? null
+                        : Theme.of(context).colorScheme.primary,
+                retryLabel:
+                    state.state == HomeConcreteState.failure
+                        ? 'Retry'
+                        : 'Refresh',
+                onRetry: () {
+                  ref.read(homeNotifierProvider.notifier).resetState();
+                  ref.read(homeNotifierProvider.notifier).fetchProducts();
+                },
               ),
     );
   }
