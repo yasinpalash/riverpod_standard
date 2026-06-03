@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_standard/core/constants/app_strings.dart';
 import 'package:riverpod_standard/core/constants/route_constants.dart';
 import 'package:riverpod_standard/core/utils/utils.dart';
 import 'package:riverpod_standard/core/widgets/app_button.dart';
@@ -51,7 +52,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }));
 
     return Scaffold(
-      appBar: AppBar(title: Text("Test-Driven Development")),
+      appBar: AppBar(title: const Text(AppStrings.appTitle)),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -90,7 +91,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     const SizedBox(height: 40),
                     const Text(
-                      "Welcome Back",
+                      AppStrings.welcomeBack,
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
@@ -100,7 +101,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      "Login to continue your journey",
+                      AppStrings.loginSubtitle,
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 16,
@@ -128,14 +129,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             child: Column(
                               children: [
                                 AuthField(
-                                  hintText: 'Username',
+                                  hintText: AppStrings.username,
                                   controller: usernameController,
                                   validator: AppValidator.validateUsername,
                                   textInputAction: TextInputAction.next,
                                 ),
                                 const SizedBox(height: 16),
                                 AuthField(
-                                  hintText: 'Password',
+                                  hintText: AppStrings.password,
                                   obscureText: true,
                                   controller: passwordController,
                                   validator: AppValidator.validatePassword,
@@ -168,7 +169,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Widget loginButton({required bool isLoading}) {
     return AppButton(
-      label: 'Login',
+      label: AppStrings.login,
       onPressed: login,
       isLoading: isLoading,
     );

@@ -1,5 +1,6 @@
 import 'package:riverpod_standard/core/logging/logging.dart';
 import 'package:riverpod_standard/core/constants/api_constants.dart';
+import 'package:riverpod_standard/core/constants/app_strings.dart';
 import '../../../../shared/data/remote/network_service.dart';
 import '../../../../shared/domain/models/either.dart';
 import '../../../../shared/domain/models/user/user_model.dart';
@@ -34,13 +35,13 @@ class LoginUserRemoteDataSource implements LoginUserDataSource {
       );
     } catch (e, stackTrace) {
       AppLogger.error(
-        'Failed to parse login response',
+        AppStrings.failedToParseLoginResponse,
         error: e,
         stackTrace: stackTrace,
       );
       return Left(
         AppException(
-          message: 'Unknown error occurred',
+          message: AppStrings.unknownErrorOccurred,
           statusCode: 1,
           identifier: '${e.toString()}\nLoginUserRemoteDataSource.loginUser',
         ),

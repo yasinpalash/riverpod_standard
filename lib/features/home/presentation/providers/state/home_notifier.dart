@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/core/constants/api_constants.dart';
+import 'package:riverpod_standard/core/constants/app_strings.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/state/home_state.dart';
 import 'package:riverpod_standard/shared/domain/models/either.dart';
 import 'package:riverpod_standard/shared/domain/models/paginated_response.dart';
@@ -32,7 +33,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     } else {
       state = state.copyWith(
         state: HomeConcreteState.fetchedAllProducts,
-        message: 'No more products available',
+        message: AppStrings.noMoreProductsAvailable,
         isLoading: false,
       );
     }
@@ -57,7 +58,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     } else {
       state = state.copyWith(
         state: HomeConcreteState.fetchedAllProducts,
-        message: 'No more products available',
+        message: AppStrings.noMoreProductsAvailable,
         isLoading: false,
       );
     }
@@ -84,7 +85,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
                   ? HomeConcreteState.fetchedAllProducts
                   : HomeConcreteState.loaded,
           hasData: true,
-          message: totalProducts.isEmpty ? 'No products found' : '',
+          message: totalProducts.isEmpty ? AppStrings.noProductsFound : '',
           page: totalProducts.length ~/ ApiConstants.productsPerPage,
           total: data.total,
           isLoading: false,
