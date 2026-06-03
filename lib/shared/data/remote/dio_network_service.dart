@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:riverpod_standard/core/constants/api_constants.dart';
 import 'package:riverpod_standard/shared/data/remote/network_service.dart';
 import 'package:riverpod_standard/shared/domain/models/either.dart';
 import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
@@ -41,8 +42,8 @@ class DioNetworkService extends NetworkService with ExceptionHandlerMixin {
 
   @override
   Map<String, Object> get headers => {
-    'accept': 'application/json',
-    'content-type': 'application/json',
+    ApiConstants.acceptHeader: ApiConstants.jsonMimeType,
+    ApiConstants.contentTypeHeader: ApiConstants.jsonMimeType,
   };
   @override
   Map<String, dynamic>? updateHeader(Map<String, dynamic> data) {

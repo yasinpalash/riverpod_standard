@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_standard/core/constants/api_constants.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/state/home_state.dart';
 import 'package:riverpod_standard/shared/domain/models/either.dart';
 import 'package:riverpod_standard/shared/domain/models/paginated_response.dart';
 import 'package:riverpod_standard/shared/domain/models/product/product_model.dart';
 import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
-import '../../../../../shared/globals.dart';
 import '../../../domain/repositories/home_repository.dart';
 
 class HomeNotifier extends StateNotifier<HomeState> {
@@ -26,7 +26,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
       );
 
       final response = await homeRepository.fetchProducts(
-        skip: state.page * productsPerPage,
+        skip: state.page * ApiConstants.productsPerPage,
       );
       updateStateFromResponse(response);
     } else {
@@ -49,7 +49,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
       );
 
       final response = await homeRepository.searchProducts(
-        skip: state.page * productsPerPage,
+        skip: state.page * ApiConstants.productsPerPage,
         query: query,
       );
 
@@ -85,7 +85,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
                   : HomeConcreteState.loaded,
           hasData: true,
           message: totalProducts.isEmpty ? 'No products found' : '',
-          page: totalProducts.length ~/ productsPerPage,
+          page: totalProducts.length ~/ ApiConstants.productsPerPage,
           total: data.total,
           isLoading: false,
         );
