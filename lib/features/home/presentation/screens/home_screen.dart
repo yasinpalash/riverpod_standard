@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_standard/core/constants/app_strings.dart';
 import 'package:riverpod_standard/core/constants/route_constants.dart';
 import 'package:riverpod_standard/core/utils/utils.dart';
 import 'package:riverpod_standard/core/widgets/app_error_view.dart';
@@ -76,7 +77,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ? TextField(
                   style: Theme.of(context).textTheme.bodyMedium,
                   decoration: InputDecoration(
-                    hintText: 'Search here',
+                    hintText: AppStrings.searchHere,
                     hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
@@ -94,7 +95,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   controller: searchController,
                   onChanged: _onSearchChanged,
                 )
-                : const Text("Home"),
+                : const Text(AppStrings.home),
         actions: [
           IconButton(
             onPressed: () {
@@ -161,14 +162,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               : AppErrorView(
                 title:
                     state.state == HomeConcreteState.failure
-                        ? 'Something went wrong'
-                        : 'No products found',
+                        ? AppStrings.somethingWentWrong
+                        : AppStrings.noProductsFound,
                 message:
                     state.message.isNotBlank
                         ? state.message
                         : isSearchActive
-                        ? 'Try a different search keyword.'
-                        : 'Refresh the list and try again.',
+                        ? AppStrings.tryDifferentSearchKeyword
+                        : AppStrings.refreshListAndTryAgain,
                 icon:
                     state.state == HomeConcreteState.failure
                         ? Icons.error_outline
@@ -179,8 +180,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         : Theme.of(context).colorScheme.primary,
                 retryLabel:
                     state.state == HomeConcreteState.failure
-                        ? 'Retry'
-                        : 'Refresh',
+                        ? AppStrings.retry
+                        : AppStrings.refresh,
                 onRetry: () {
                   ref.read(homeNotifierProvider.notifier).resetState();
                   ref.read(homeNotifierProvider.notifier).fetchProducts();

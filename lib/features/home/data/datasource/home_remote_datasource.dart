@@ -1,8 +1,8 @@
+import 'package:riverpod_standard/core/constants/api_constants.dart';
 import 'package:riverpod_standard/shared/domain/models/either.dart';
 import 'package:riverpod_standard/shared/domain/models/paginated_response.dart';
 import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
 import '../../../../shared/data/remote/network_service.dart';
-import '../../../../shared/globals.dart';
 
 abstract class HomeDatasource {
   Future<Either<AppException, PaginatedResponse>> fetchPaginatedProducts({
@@ -23,8 +23,11 @@ class HomeRemoteDatasource extends HomeDatasource {
     required int skip,
   }) async {
     final response = await networkService.get(
-      '/products',
-      queryParameters: {'skip': skip, 'limit': productsPerPage},
+      ApiConstants.products,
+      queryParameters: {
+        ApiConstants.skipQuery: skip,
+        ApiConstants.limitQuery: ApiConstants.productsPerPage,
+      },
     );
 
     return response.fold((l) => Left(l), (r) {
@@ -52,8 +55,12 @@ class HomeRemoteDatasource extends HomeDatasource {
     required String query,
   }) async {
     final response = await networkService.get(
-      '/products/search?q=$query',
-      queryParameters: {'skip': skip, 'limit': productsPerPage},
+      ApiConstants.searchProducts,
+      queryParameters: {
+        ApiConstants.searchQuery: query,
+        ApiConstants.skipQuery: skip,
+        ApiConstants.limitQuery: ApiConstants.productsPerPage,
+      },
     );
 
     return response.fold((l) => Left(l), (r) {
