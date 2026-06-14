@@ -1,7 +1,7 @@
 import 'dart:convert';
 import '../../../../core/constants/storage_keys.dart';
 import '../../../../core/storage/local_storage_service.dart';
-import '../../../../shared/domain/models/either.dart';
+import '../../../../shared/models/either.dart';
 import '../../../../shared/models/user_model.dart';
 import '../../../../core/errors/exceptions.dart';
 

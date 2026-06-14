@@ -2,9 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/core/constants/api_constants.dart';
 import 'package:riverpod_standard/core/constants/app_strings.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/state/home_state.dart';
-import 'package:riverpod_standard/shared/domain/models/either.dart';
-import 'package:riverpod_standard/shared/domain/models/paginated_response.dart';
-import 'package:riverpod_standard/shared/domain/models/product/product_model.dart';
+import 'package:riverpod_standard/shared/models/either.dart';
+import 'package:riverpod_standard/shared/models/paginated_response.dart';
+import 'package:riverpod_standard/features/home/domain/models/product/product_model.dart';
 import 'package:riverpod_standard/core/errors/exceptions.dart';
 import '../../../domain/repositories/home_repository.dart';
 

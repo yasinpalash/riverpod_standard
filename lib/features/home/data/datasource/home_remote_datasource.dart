@@ -1,6 +1,6 @@
 import 'package:riverpod_standard/core/constants/api_constants.dart';
-import 'package:riverpod_standard/shared/domain/models/either.dart';
-import 'package:riverpod_standard/shared/domain/models/paginated_response.dart';
+import 'package:riverpod_standard/shared/models/either.dart';
+import 'package:riverpod_standard/shared/models/paginated_response.dart';
 import 'package:riverpod_standard/core/errors/exceptions.dart';
 import '../../../../core/network/api_service.dart';
 

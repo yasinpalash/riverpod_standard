@@ -3,7 +3,7 @@ import 'package:riverpod_standard/core/constants/api_constants.dart';
 import 'package:riverpod_standard/core/errors/error_handler.dart';
 import 'package:riverpod_standard/core/errors/exceptions.dart';
 import 'package:riverpod_standard/core/network/api_service.dart';
-import 'package:riverpod_standard/shared/domain/models/either.dart';
+import 'package:riverpod_standard/shared/models/either.dart';
 import 'package:riverpod_standard/shared/globals.dart';
 import 'package:riverpod_standard/shared/models/base_response.dart';
 

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:riverpod_standard/shared/domain/models/either.dart';
+import 'package:riverpod_standard/shared/models/either.dart';
 import 'package:riverpod_standard/shared/models/base_response.dart';
 
 class AppException implements Exception {

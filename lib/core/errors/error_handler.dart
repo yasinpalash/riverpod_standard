@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:riverpod_standard/core/errors/exceptions.dart';
 import 'package:riverpod_standard/core/network/api_service.dart';
 import 'package:riverpod_standard/core/logging/logging.dart';
-import 'package:riverpod_standard/shared/domain/models/either.dart';
+import 'package:riverpod_standard/shared/models/either.dart';
 import 'package:riverpod_standard/shared/models/base_response.dart';
 
 mixin ErrorHandler on ApiService {
