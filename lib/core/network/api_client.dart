@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_standard/core/constants/api_constants.dart';
+import 'package:riverpod_standard/core/constants/app_constants.dart';
 import 'package:riverpod_standard/core/errors/error_handler.dart';
 import 'package:riverpod_standard/core/errors/exceptions.dart';
 import 'package:riverpod_standard/core/network/api_service.dart';
 import 'package:riverpod_standard/shared/models/either.dart';
-import 'package:riverpod_standard/shared/globals.dart';
 import 'package:riverpod_standard/shared/models/base_response.dart';
 
 class ApiClient extends ApiService with ErrorHandler {
@@ -15,7 +15,7 @@ class ApiClient extends ApiService with ErrorHandler {
     required this.connectTimeout,
     required this.receiveTimeout,
   }) {
-    if (!kTestMode) {
+    if (!AppConstants.isTestMode) {
       dio.options = dioBaseOptions;
       if (enableLogging) {
         dio.interceptors.add(
@@ -49,7 +49,7 @@ class ApiClient extends ApiService with ErrorHandler {
   @override
   Map<String, dynamic>? updateHeader(Map<String, dynamic> data) {
     final header = {...headers, ...data};
-    if (!kTestMode) {
+    if (!AppConstants.isTestMode) {
       dio.options.headers = header;
     }
     return header;
