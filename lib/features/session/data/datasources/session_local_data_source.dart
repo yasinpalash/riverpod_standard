@@ -5,7 +5,7 @@ import '../../../../shared/models/either.dart';
 import '../../../../shared/models/user_model.dart';
 import '../../../../core/errors/exceptions.dart';
 
-abstract class UserDataSource {
+abstract class SessionLocalDataSource {
   String get storageKey;
 
   Future<Either<AppException, User>> fetchUser();
@@ -14,8 +14,8 @@ abstract class UserDataSource {
   Future<bool> hasUser();
 }
 
-class UserLocalDatasource extends UserDataSource {
-  UserLocalDatasource(this.storageService);
+class SessionLocalDataSourceImpl extends SessionLocalDataSource {
+  SessionLocalDataSourceImpl(this.storageService);
   final LocalStorageService storageService;
 
   @override
@@ -27,7 +27,7 @@ class UserLocalDatasource extends UserDataSource {
     if (data == null) {
       return Left(
         AppException(
-          identifier: 'UserLocalDatasource',
+          identifier: 'SessionLocalDataSourceImpl',
           statusCode: 404,
           message: 'User not found',
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../services/user_cache_service/domain/providers/user_cache_provider.dart';
+import '../../../session/presentation/providers/session_provider.dart';
 
 final userLoginCheckProvider = FutureProvider((ref) async {
-  final repo = ref.watch(userLocalRepositoryProvider);
+  final repo = ref.watch(sessionRepositoryProvider);
   return await repo.hasUser();
 });

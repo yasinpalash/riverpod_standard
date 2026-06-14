@@ -1,13 +1,13 @@
-import 'package:riverpod_standard/services/user_cache_service/domain/repositories/user_cache_repository.dart';
+import 'package:riverpod_standard/core/errors/exceptions.dart';
+import 'package:riverpod_standard/features/session/domain/repositories/session_repository.dart';
 import 'package:riverpod_standard/shared/models/either.dart';
 import 'package:riverpod_standard/shared/models/user_model.dart';
-import 'package:riverpod_standard/core/errors/exceptions.dart';
-import '../datasource/user_local_data_source.dart';
+import '../datasources/session_local_data_source.dart';
 
-class UserRepositoryImpl extends UserRepository {
-  UserRepositoryImpl(this.dataSource);
+class SessionRepositoryImpl extends SessionRepository {
+  SessionRepositoryImpl(this.dataSource);
 
-  final UserDataSource dataSource;
+  final SessionLocalDataSource dataSource;
 
   @override
   Future<bool> deleteUser() {
