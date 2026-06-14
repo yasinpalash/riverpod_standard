@@ -1,7 +1,7 @@
 import 'package:riverpod_standard/features/home/domain/repositories/home_repository.dart';
 import 'package:riverpod_standard/shared/domain/models/either.dart';
 import 'package:riverpod_standard/shared/domain/models/paginated_response.dart';
-import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
+import 'package:riverpod_standard/core/errors/exceptions.dart';
 import '../datasource/home_remote_datasource.dart';
 
 class HomeRepositoryImpl extends HomeRepository {

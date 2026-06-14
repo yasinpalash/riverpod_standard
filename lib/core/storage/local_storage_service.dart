@@ -1,8 +1,24 @@
 import 'dart:async';
-import 'package:riverpod_standard/shared/data/local/storage_service.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SharedPrefsService implements StorageService {
+abstract class LocalStorageService {
+  void init();
+
+  bool get hasInitialized;
+
+  Future<bool> remove(String key);
+
+  Future<Object?> get(String key);
+
+  Future<bool> set(String key, String data);
+
+  Future<void> clear();
+
+  Future<bool> has(String key);
+}
+
+class SharedPrefsLocalStorageService implements LocalStorageService {
   SharedPreferences? sharedPreferences;
 
   final Completer<SharedPreferences> initCompleter =
@@ -10,7 +26,9 @@ class SharedPrefsService implements StorageService {
 
   @override
   void init() {
-    initCompleter.complete(SharedPreferences.getInstance());
+    if (!initCompleter.isCompleted) {
+      initCompleter.complete(SharedPreferences.getInstance());
+    }
   }
 
   @override
@@ -37,12 +55,12 @@ class SharedPrefsService implements StorageService {
   @override
   Future<bool> remove(String key) async {
     sharedPreferences = await initCompleter.future;
-    return await sharedPreferences!.remove(key);
+    return sharedPreferences!.remove(key);
   }
 
   @override
   Future<bool> set(String key, String data) async {
     sharedPreferences = await initCompleter.future;
-    return await sharedPreferences!.setString(key, data.toString());
+    return sharedPreferences!.setString(key, data);
   }
 }

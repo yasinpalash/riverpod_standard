@@ -1,7 +1,7 @@
 import 'package:riverpod_standard/services/user_cache_service/domain/repositories/user_cache_repository.dart';
 import 'package:riverpod_standard/shared/domain/models/either.dart';
-import 'package:riverpod_standard/shared/domain/models/user/user_model.dart';
-import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
+import 'package:riverpod_standard/shared/models/user_model.dart';
+import 'package:riverpod_standard/core/errors/exceptions.dart';
 import '../datasource/user_local_data_source.dart';
 
 class UserRepositoryImpl extends UserRepository {

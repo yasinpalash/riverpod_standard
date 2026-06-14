@@ -5,7 +5,7 @@ import 'package:riverpod_standard/features/home/presentation/providers/state/hom
 import 'package:riverpod_standard/shared/domain/models/either.dart';
 import 'package:riverpod_standard/shared/domain/models/paginated_response.dart';
 import 'package:riverpod_standard/shared/domain/models/product/product_model.dart';
-import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
+import 'package:riverpod_standard/core/errors/exceptions.dart';
 import '../../../domain/repositories/home_repository.dart';
 
 class HomeNotifier extends StateNotifier<HomeState> {

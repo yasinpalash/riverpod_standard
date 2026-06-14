@@ -1,22 +1,23 @@
-import '../../exceptions/http_exception.dart';
-import 'either.dart';
+import 'package:riverpod_standard/core/errors/exceptions.dart';
+import 'package:riverpod_standard/shared/domain/models/either.dart';
 
-class Response {
+class BaseResponse {
   final int statusCode;
   final String? statusMessage;
   final dynamic data;
 
-  Response({
+  BaseResponse({
     required this.statusCode,
     this.statusMessage,
     this.data = const {},
   });
+
   @override
   String toString() {
     return 'statusCode=$statusCode\nstatusMessage=$statusMessage\n data=$data';
   }
 }
 
-extension ResponseExtension on Response {
-  Right<AppException, Response> get toRight => Right(this);
+extension ResponseExtension on BaseResponse {
+  Right<AppException, BaseResponse> get toRight => Right(this);
 }

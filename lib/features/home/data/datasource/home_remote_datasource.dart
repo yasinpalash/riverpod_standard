@@ -1,8 +1,8 @@
 import 'package:riverpod_standard/core/constants/api_constants.dart';
 import 'package:riverpod_standard/shared/domain/models/either.dart';
 import 'package:riverpod_standard/shared/domain/models/paginated_response.dart';
-import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
-import '../../../../shared/data/remote/network_service.dart';
+import 'package:riverpod_standard/core/errors/exceptions.dart';
+import '../../../../core/network/api_service.dart';
 
 abstract class HomeDatasource {
   Future<Either<AppException, PaginatedResponse>> fetchPaginatedProducts({
@@ -15,7 +15,7 @@ abstract class HomeDatasource {
 }
 
 class HomeRemoteDatasource extends HomeDatasource {
-  final NetworkService networkService;
+  final ApiService networkService;
   HomeRemoteDatasource(this.networkService);
 
   @override

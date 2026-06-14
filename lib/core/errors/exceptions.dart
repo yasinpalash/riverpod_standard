@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
-
-import '../domain/models/either.dart';
-import '../domain/models/response.dart';
+import 'package:riverpod_standard/shared/domain/models/either.dart';
+import 'package:riverpod_standard/shared/models/base_response.dart';
 
 class AppException implements Exception {
   final String message;
@@ -29,10 +28,12 @@ class CacheFailureException extends Equatable implements AppException {
 
   @override
   int get statusCode => 100;
+
   @override
   List<Object?> get props => [message, statusCode, identifier];
 }
 
 extension HttpExceptionExtension on AppException {
-  Left<AppException, Response> get toLeft => Left<AppException, Response>(this);
+  Left<AppException, BaseResponse> get toLeft =>
+      Left<AppException, BaseResponse>(this);
 }

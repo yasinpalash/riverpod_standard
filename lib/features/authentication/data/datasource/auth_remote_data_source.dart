@@ -1,17 +1,17 @@
 import 'package:riverpod_standard/core/logging/logging.dart';
 import 'package:riverpod_standard/core/constants/api_constants.dart';
 import 'package:riverpod_standard/core/constants/app_strings.dart';
-import '../../../../shared/data/remote/network_service.dart';
+import '../../../../core/network/api_service.dart';
 import '../../../../shared/domain/models/either.dart';
-import '../../../../shared/domain/models/user/user_model.dart';
-import '../../../../shared/exceptions/http_exception.dart';
+import '../../../../shared/models/user_model.dart';
+import '../../../../core/errors/exceptions.dart';
 
 abstract class LoginUserDataSource {
   Future<Either<AppException, User>> loginUser({required User user});
 }
 
 class LoginUserRemoteDataSource implements LoginUserDataSource {
-  final NetworkService networkService;
+  final ApiService networkService;
   LoginUserRemoteDataSource(this.networkService);
 
   @override

@@ -1,14 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_standard/core/constants/api_constants.dart';
-import 'package:riverpod_standard/shared/data/remote/network_service.dart';
+import 'package:riverpod_standard/core/errors/error_handler.dart';
+import 'package:riverpod_standard/core/errors/exceptions.dart';
+import 'package:riverpod_standard/core/network/api_service.dart';
 import 'package:riverpod_standard/shared/domain/models/either.dart';
-import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
-import '../../../core/utils/mixins/exception_handler_mixin.dart';
-import '../../domain/models/response.dart' as response;
-import '../../globals.dart';
+import 'package:riverpod_standard/shared/globals.dart';
+import 'package:riverpod_standard/shared/models/base_response.dart';
 
-class DioNetworkService extends NetworkService with ExceptionHandlerMixin {
-  DioNetworkService(
+class ApiClient extends ApiService with ErrorHandler {
+  ApiClient(
     this.dio, {
     required this.baseUrl,
     required this.enableLogging,
@@ -45,9 +45,10 @@ class DioNetworkService extends NetworkService with ExceptionHandlerMixin {
     ApiConstants.acceptHeader: ApiConstants.jsonMimeType,
     ApiConstants.contentTypeHeader: ApiConstants.jsonMimeType,
   };
+
   @override
   Map<String, dynamic>? updateHeader(Map<String, dynamic> data) {
-    final header = {...data, ...headers};
+    final header = {...headers, ...data};
     if (!kTestMode) {
       dio.options.headers = header;
     }
@@ -55,7 +56,7 @@ class DioNetworkService extends NetworkService with ExceptionHandlerMixin {
   }
 
   @override
-  Future<Either<AppException, response.Response>> get(
+  Future<Either<AppException, BaseResponse>> get(
     String endpoint, {
     Map<String, dynamic>? queryParameters,
   }) {
@@ -67,7 +68,7 @@ class DioNetworkService extends NetworkService with ExceptionHandlerMixin {
   }
 
   @override
-  Future<Either<AppException, response.Response>> post(
+  Future<Either<AppException, BaseResponse>> post(
     String endpoint, {
     Map<String, dynamic>? data,
   }) {

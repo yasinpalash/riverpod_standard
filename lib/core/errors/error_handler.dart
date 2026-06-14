@@ -1,22 +1,21 @@
-import 'dart:async';
 import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:riverpod_standard/core/errors/exceptions.dart';
+import 'package:riverpod_standard/core/network/api_service.dart';
 import 'package:riverpod_standard/core/logging/logging.dart';
 import 'package:riverpod_standard/shared/domain/models/either.dart';
-import 'package:riverpod_standard/shared/exceptions/http_exception.dart';
-import 'package:riverpod_standard/shared/data/remote/remote.dart';
-import '../../../shared/domain/models/response.dart' as response;
+import 'package:riverpod_standard/shared/models/base_response.dart';
 
-mixin ExceptionHandlerMixin on NetworkService {
-  Future<Either<AppException, response.Response>>
-  handleException<T extends Object>(
+mixin ErrorHandler on ApiService {
+  Future<Either<AppException, BaseResponse>> handleException(
     Future<Response<dynamic>> Function() handler, {
     String endpoint = '',
   }) async {
     try {
       final res = await handler();
       return Right(
-        response.Response(
+        BaseResponse(
           statusCode: res.statusCode ?? 200,
           data: res.data,
           statusMessage: res.statusMessage,

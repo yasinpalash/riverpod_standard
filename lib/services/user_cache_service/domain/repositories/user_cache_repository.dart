@@ -1,6 +1,6 @@
 import '../../../../shared/domain/models/either.dart';
-import '../../../../shared/domain/models/user/user_model.dart';
-import '../../../../shared/exceptions/http_exception.dart';
+import '../../../../shared/models/user_model.dart';
+import '../../../../core/errors/exceptions.dart';
 
 abstract class UserRepository {
   Future<Either<AppException, User>> fetchUser();

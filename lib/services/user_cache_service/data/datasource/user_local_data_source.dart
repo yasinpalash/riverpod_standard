@@ -1,9 +1,9 @@
 import 'dart:convert';
 import '../../../../core/constants/storage_keys.dart';
-import '../../../../shared/data/local/storage_service.dart';
+import '../../../../core/storage/local_storage_service.dart';
 import '../../../../shared/domain/models/either.dart';
-import '../../../../shared/domain/models/user/user_model.dart';
-import '../../../../shared/exceptions/http_exception.dart';
+import '../../../../shared/models/user_model.dart';
+import '../../../../core/errors/exceptions.dart';
 
 abstract class UserDataSource {
   String get storageKey;
@@ -16,7 +16,7 @@ abstract class UserDataSource {
 
 class UserLocalDatasource extends UserDataSource {
   UserLocalDatasource(this.storageService);
-  final StorageService storageService;
+  final LocalStorageService storageService;
 
   @override
   String get storageKey => StorageKeys.user;
