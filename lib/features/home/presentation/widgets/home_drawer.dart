@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_standard/services/user_cache_service/domain/providers/current_user_provider.dart';
-import 'package:riverpod_standard/services/user_cache_service/domain/providers/user_cache_provider.dart';
+import 'package:riverpod_standard/features/session/presentation/providers/current_user_provider.dart';
+import 'package:riverpod_standard/features/session/presentation/providers/session_provider.dart';
+import 'package:riverpod_standard/shared/providers/app_provider.dart';
 import '../../../../core/routes/app_route.dart';
 import '../../../../core/theme/app_theme.dart';
 
@@ -36,7 +39,10 @@ class HomeDrawer extends ConsumerWidget {
               otherAccountsPictures: [
                 InkWell(
                   onTap: () async {
-                    await ref.read(userLocalRepositoryProvider).deleteUser();
+                    unawaited(
+                      ref.read(microInteractionServiceProvider).warning(),
+                    );
+                    await ref.read(sessionRepositoryProvider).deleteUser();
                     if (!context.mounted) return;
                     AutoRouter.of(
                       context,
@@ -51,6 +57,9 @@ class HomeDrawer extends ConsumerWidget {
                 ),
                 InkWell(
                   onTap: () {
+                    unawaited(
+                      ref.read(microInteractionServiceProvider).buttonTap(),
+                    );
                     ref.read(appThemeProvider.notifier).toggleTheme();
                   },
                   child: CircleAvatar(

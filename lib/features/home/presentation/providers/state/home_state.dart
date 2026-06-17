@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../../../../shared/domain/models/product/product_model.dart';
+import '../../../domain/models/product/product_model.dart';
 
 enum HomeConcreteState {
   initial,
