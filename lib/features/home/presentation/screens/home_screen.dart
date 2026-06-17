@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/core/constants/app_strings.dart';
 import 'package:riverpod_standard/core/constants/route_constants.dart';
+import 'package:riverpod_standard/core/theme/app_motion.dart';
 import 'package:riverpod_standard/core/utils/utils.dart';
 import 'package:riverpod_standard/core/widgets/app_error_view.dart';
 import 'package:riverpod_standard/core/widgets/app_loading.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/home_state_provider.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/state/home_state.dart';
+import 'package:riverpod_standard/shared/providers/app_provider.dart';
 import '../widgets/home_drawer.dart';
 
 @RoutePage()
@@ -99,6 +101,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () {
+              unawaited(ref.read(microInteractionServiceProvider).buttonTap());
               searchController.clear();
               setState(() {
                 isSearchActive = !isSearchActive;
@@ -109,7 +112,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               }
               refreshScrollControllerListener();
             },
-            icon: Icon(isSearchActive ? Icons.clear : Icons.search),
+            icon: AnimatedScale(
+              scale: AppMotion.selectedScale(isSearchActive),
+              duration: AppMotion.tabStaggerDuration(0),
+              curve: AppMotion.tabScaleCurve,
+              child: AnimatedSwitcher(
+                duration: AppMotion.tabStaggerDuration(0),
+                switchInCurve: AppMotion.tabCurve,
+                switchOutCurve: AppMotion.tabCurve,
+                child: Icon(
+                  isSearchActive ? Icons.clear : Icons.search,
+                  key: ValueKey(isSearchActive),
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -183,6 +199,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ? AppStrings.retry
                         : AppStrings.refresh,
                 onRetry: () {
+                  unawaited(
+                    ref.read(microInteractionServiceProvider).buttonTap(),
+                  );
                   ref.read(homeNotifierProvider.notifier).resetState();
                   ref.read(homeNotifierProvider.notifier).fetchProducts();
                 },

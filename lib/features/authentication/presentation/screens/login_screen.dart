@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +9,7 @@ import 'package:riverpod_standard/core/utils/utils.dart';
 import 'package:riverpod_standard/core/widgets/app_button.dart';
 import 'package:riverpod_standard/features/authentication/presentation/providers/auth_providers.dart';
 import 'package:riverpod_standard/features/authentication/presentation/providers/state/auth_state.dart';
+import 'package:riverpod_standard/shared/providers/app_provider.dart';
 import '../../../../core/routes/app_route.dart';
 import '../widgets/auth_field.dart';
 
@@ -43,8 +46,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       next,
     ) {
       if (next is Failure) {
+        unawaited(ref.read(microInteractionServiceProvider).error());
         context.showErrorSnackBar(next.exception.message.toString());
       } else if (next is Success) {
+        unawaited(ref.read(microInteractionServiceProvider).success());
         AutoRouter.of(
           context,
         ).pushAndPopUntil(const HomeRoute(), predicate: (_) => false);
@@ -176,8 +181,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void login() {
+    unawaited(ref.read(microInteractionServiceProvider).buttonTap());
     context.dismissKeyboard();
     if (!(_formKey.currentState?.validate() ?? false)) {
+      unawaited(ref.read(microInteractionServiceProvider).warning());
       return;
     }
 
