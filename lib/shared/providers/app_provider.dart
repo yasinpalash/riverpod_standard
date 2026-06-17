@@ -12,6 +12,11 @@ final connectivityServiceProvider = Provider<ConnectivityService>(
   (ref) => ConnectivityService(),
 );
 
+final connectivityStatusProvider = StreamProvider<bool>((ref) {
+  final connectivityService = ref.watch(connectivityServiceProvider);
+  return connectivityService.onConnectivityChanged;
+});
+
 final hapticServiceProvider = Provider<HapticService>(
   (ref) => const HapticService(),
 );
@@ -31,6 +36,7 @@ final storageServiceProvider = Provider<LocalStorageService>((ref) {
 
 final apiServiceProvider = Provider<ApiService>((ref) {
   final appConfig = ref.watch(appConfigProvider);
+  final connectivityService = ref.watch(connectivityServiceProvider);
   final dio = Dio();
 
   return ApiClient(
@@ -39,6 +45,7 @@ final apiServiceProvider = Provider<ApiService>((ref) {
     enableLogging: appConfig.enableLogging,
     connectTimeout: appConfig.connectTimeout,
     receiveTimeout: appConfig.receiveTimeout,
+    connectivityService: connectivityService,
   );
 });
 

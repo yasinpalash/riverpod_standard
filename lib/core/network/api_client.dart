@@ -3,7 +3,9 @@ import 'package:riverpod_standard/core/constants/api_constants.dart';
 import 'package:riverpod_standard/core/constants/app_constants.dart';
 import 'package:riverpod_standard/core/errors/error_handler.dart';
 import 'package:riverpod_standard/core/errors/exceptions.dart';
+import 'package:riverpod_standard/core/network/interceptors/connectivity_interceptor.dart';
 import 'package:riverpod_standard/core/network/api_service.dart';
+import 'package:riverpod_standard/core/services/connectivity_service.dart';
 import 'package:riverpod_standard/shared/models/either.dart';
 import 'package:riverpod_standard/shared/models/base_response.dart';
 
@@ -14,9 +16,13 @@ class ApiClient extends ApiService with ErrorHandler {
     required this.enableLogging,
     required this.connectTimeout,
     required this.receiveTimeout,
+    ConnectivityService? connectivityService,
   }) {
     if (!AppConstants.isTestMode) {
       dio.options = dioBaseOptions;
+      if (connectivityService != null) {
+        dio.interceptors.add(ConnectivityInterceptor(connectivityService));
+      }
       if (enableLogging) {
         dio.interceptors.add(
           LogInterceptor(requestBody: true, responseBody: true),

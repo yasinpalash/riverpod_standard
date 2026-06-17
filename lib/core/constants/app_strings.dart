@@ -14,6 +14,8 @@ class AppStrings {
 
   static const String somethingWentWrong = 'Something went wrong';
   static const String unknownErrorOccurred = 'Unknown error occurred';
+  static const String noInternetConnection =
+      'Please check your internet connection and try again.';
   static const String retry = 'Retry';
   static const String refresh = 'Refresh';
 

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../config/app_config_provider.dart';
 import '../core/routes/app_route.dart';
 import '../core/theme/app_theme.dart';
+import '../core/widgets/internet_status_banner.dart';
 
 class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
@@ -27,6 +28,11 @@ class _MyAppState extends ConsumerState<MyApp> {
       routeInformationParser: _appRouter.defaultRouteParser(),
       routerDelegate: _appRouter.delegate(),
       debugShowCheckedModeBanner: !appConfig.isProd,
+      builder: (context, child) {
+        return Stack(
+          children: [if (child != null) child, const InternetStatusBanner()],
+        );
+      },
     );
   }
 }
