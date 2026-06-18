@@ -3,9 +3,14 @@ import 'package:riverpod_standard/core/constants/api_constants.dart';
 import 'package:riverpod_standard/core/constants/app_constants.dart';
 import 'package:riverpod_standard/core/errors/error_handler.dart';
 import 'package:riverpod_standard/core/errors/exceptions.dart';
+import 'package:riverpod_standard/core/monitoring/error_reporter.dart';
+import 'package:riverpod_standard/core/network/events/network_event_bus.dart';
+import 'package:riverpod_standard/core/network/interceptors/auth_interceptor.dart';
 import 'package:riverpod_standard/core/network/interceptors/connectivity_interceptor.dart';
+import 'package:riverpod_standard/core/network/interceptors/global_error_interceptor.dart';
 import 'package:riverpod_standard/core/network/api_service.dart';
 import 'package:riverpod_standard/core/services/connectivity_service.dart';
+import 'package:riverpod_standard/core/storage/local_storage_service.dart';
 import 'package:riverpod_standard/shared/models/either.dart';
 import 'package:riverpod_standard/shared/models/base_response.dart';
 
@@ -17,11 +22,25 @@ class ApiClient extends ApiService with ErrorHandler {
     required this.connectTimeout,
     required this.receiveTimeout,
     ConnectivityService? connectivityService,
+    LocalStorageService? storageService,
+    NetworkEventBus? networkEventBus,
+    ErrorReporter? errorReporter,
   }) {
     if (!AppConstants.isTestMode) {
       dio.options = dioBaseOptions;
       if (connectivityService != null) {
         dio.interceptors.add(ConnectivityInterceptor(connectivityService));
+      }
+      if (storageService != null) {
+        dio.interceptors.add(AuthInterceptor(storageService));
+      }
+      if (networkEventBus != null && errorReporter != null) {
+        dio.interceptors.add(
+          GlobalErrorInterceptor(
+            eventBus: networkEventBus,
+            errorReporter: errorReporter,
+          ),
+        );
       }
       if (enableLogging) {
         dio.interceptors.add(
