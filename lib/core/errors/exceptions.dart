@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:riverpod_standard/core/constants/app_strings.dart';
 import 'package:riverpod_standard/shared/models/either.dart';
 import 'package:riverpod_standard/shared/models/base_response.dart';
 
@@ -28,6 +29,20 @@ class CacheFailureException extends Equatable implements AppException {
 
   @override
   int get statusCode => 100;
+
+  @override
+  List<Object?> get props => [message, statusCode, identifier];
+}
+
+class NoInternetException extends Equatable implements AppException {
+  @override
+  String get identifier => 'No internet connection';
+
+  @override
+  String get message => AppStrings.noInternetConnection;
+
+  @override
+  int get statusCode => 0;
 
   @override
   List<Object?> get props => [message, statusCode, identifier];

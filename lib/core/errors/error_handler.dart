@@ -37,14 +37,21 @@ mixin ErrorHandler on ApiService {
         statusCode = 0;
         identifier = 'SocketException ${e.message}\nat $endpoint';
       } else if (e is DioException) {
-        final responseData = e.response?.data;
-        final responseMessage =
-            responseData is Map<String, dynamic>
-                ? responseData['message']?.toString()
-                : null;
-        message = responseMessage ?? e.message ?? 'Internal error occurred';
-        statusCode = e.response?.statusCode ?? 1;
-        identifier = 'DioException ${e.message}\nat $endpoint';
+        if (e.error is AppException) {
+          final appException = e.error as AppException;
+          message = appException.message;
+          statusCode = appException.statusCode;
+          identifier = '${appException.identifier}\nat $endpoint';
+        } else {
+          final responseData = e.response?.data;
+          final responseMessage =
+              responseData is Map<String, dynamic>
+                  ? responseData['message']?.toString()
+                  : null;
+          message = responseMessage ?? e.message ?? 'Internal error occurred';
+          statusCode = e.response?.statusCode ?? 1;
+          identifier = 'DioException ${e.message}\nat $endpoint';
+        }
       } else {
         message = 'Unknown error occurred';
         statusCode = 2;
