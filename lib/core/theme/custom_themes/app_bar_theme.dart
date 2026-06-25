@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../system/system_ui_config.dart';
 import 'app_text_styles.dart';
 
 class AppBarForTheme {
@@ -11,6 +12,7 @@ class AppBarForTheme {
     required Color titleColor,
     required Color surfaceTintColor,
     required double elevation,
+    required Brightness systemOverlayBrightness,
   }) {
     return AppBarTheme(
       foregroundColor: Colors.transparent,
@@ -21,7 +23,9 @@ class AppBarForTheme {
       titleTextStyle: AppTextStyles.h2.copyWith(color: titleColor),
       actionsIconTheme: IconThemeData(color: iconColor),
       centerTitle: true,
-      // systemOverlayStyle: SystemUiOverlayStyle.light,
+      systemOverlayStyle: SystemUiConfig.overlayStyleFor(
+        systemOverlayBrightness,
+      ),
     );
   }
 
@@ -31,6 +35,7 @@ class AppBarForTheme {
     titleColor: AppColors.white,
     surfaceTintColor: AppColors.primary,
     elevation: 0,
+    systemOverlayBrightness: Brightness.dark,
   );
 
   static final AppBarTheme darkAppBarTheme = _baseAppBarTheme(
@@ -39,5 +44,6 @@ class AppBarForTheme {
     titleColor: Colors.white,
     surfaceTintColor: Colors.transparent,
     elevation: 0,
+    systemOverlayBrightness: Brightness.dark,
   );
 }

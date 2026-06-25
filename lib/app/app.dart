@@ -6,6 +6,7 @@ import 'package:riverpod_standard/features/session/presentation/providers/sessio
 import 'package:riverpod_standard/shared/providers/app_provider.dart';
 import '../config/app_config_provider.dart';
 import '../core/routes/app_route.dart';
+import '../core/system/system_ui_config.dart';
 import '../core/theme/app_theme.dart';
 import '../core/widgets/internet_status_banner.dart';
 
@@ -51,8 +52,11 @@ class _MyAppState extends ConsumerState<MyApp> {
       routerDelegate: _appRouter.delegate(),
       debugShowCheckedModeBanner: !appConfig.isProd,
       builder: (context, child) {
-        return Stack(
-          children: [if (child != null) child, const InternetStatusBanner()],
+        return AnnotatedRegion(
+          value: SystemUiConfig.overlayStyleFor(Theme.of(context).brightness),
+          child: Stack(
+            children: [if (child != null) child, const InternetStatusBanner()],
+          ),
         );
       },
     );
