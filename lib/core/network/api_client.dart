@@ -152,4 +152,49 @@ class ApiClient with ErrorHandler implements ApiService {
       unwrapEnvelope: unwrapEnvelope,
     );
   }
+
+  @override
+  Future<Either<AppException, T>> upload<T>(
+    String endpoint, {
+    required dynamic data,
+    Map<String, dynamic>? queryParameters,
+    ApiProgressCallback? onSendProgress,
+    ApiProgressCallback? onReceiveProgress,
+    required JsonParser<T> parser,
+    bool unwrapEnvelope = false,
+  }) {
+    return handleException<T>(
+      () => dio.post(
+        endpoint,
+        data: data,
+        queryParameters: queryParameters,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
+      ),
+      endpoint: endpoint,
+      parser: parser,
+      unwrapEnvelope: unwrapEnvelope,
+    );
+  }
+
+  @override
+  Future<Either<AppException, String>> download(
+    String endpoint, {
+    required String savePath,
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    ApiProgressCallback? onReceiveProgress,
+  }) {
+    return handleException<String>(
+      () => dio.download(
+        endpoint,
+        savePath,
+        data: data,
+        queryParameters: queryParameters,
+        onReceiveProgress: onReceiveProgress,
+      ),
+      endpoint: endpoint,
+      parser: (_) => savePath,
+    );
+  }
 }

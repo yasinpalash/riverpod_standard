@@ -2,6 +2,8 @@ import 'package:riverpod_standard/core/errors/exceptions.dart';
 import 'package:riverpod_standard/core/network/api_response_parser.dart';
 import 'package:riverpod_standard/shared/models/either.dart';
 
+typedef ApiProgressCallback = void Function(int count, int total);
+
 abstract class ApiService {
   String get baseUrl;
   Map<String, Object> get headers;
@@ -44,5 +46,23 @@ abstract class ApiService {
     Map<String, dynamic>? queryParameters,
     required JsonParser<T> parser,
     bool unwrapEnvelope = false,
+  });
+
+  Future<Either<AppException, T>> upload<T>(
+    String endpoint, {
+    required dynamic data,
+    Map<String, dynamic>? queryParameters,
+    ApiProgressCallback? onSendProgress,
+    ApiProgressCallback? onReceiveProgress,
+    required JsonParser<T> parser,
+    bool unwrapEnvelope = false,
+  });
+
+  Future<Either<AppException, String>> download(
+    String endpoint, {
+    required String savePath,
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    ApiProgressCallback? onReceiveProgress,
   });
 }
