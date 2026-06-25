@@ -2,25 +2,25 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:riverpod_standard/core/errors/exceptions.dart';
-import 'package:riverpod_standard/core/network/api_service.dart';
 import 'package:riverpod_standard/core/logging/logging.dart';
+import 'package:riverpod_standard/core/network/api_response_parser.dart';
 import 'package:riverpod_standard/shared/models/either.dart';
-import 'package:riverpod_standard/shared/models/base_response.dart';
 
-mixin ErrorHandler on ApiService {
-  Future<Either<AppException, BaseResponse>> handleException(
+mixin ErrorHandler {
+  Future<Either<AppException, T>> handleException<T>(
     Future<Response<dynamic>> Function() handler, {
     String endpoint = '',
+    required JsonParser<T> parser,
+    bool unwrapEnvelope = false,
   }) async {
     try {
       final res = await handler();
-      return Right(
-        BaseResponse(
-          statusCode: res.statusCode ?? 200,
-          data: res.data,
-          statusMessage: res.statusMessage,
-        ),
+      final parsed = ApiResponseParser.parse<T>(
+        res,
+        parser: parser,
+        unwrapEnvelope: unwrapEnvelope,
       );
+      return Right(parsed);
     } catch (e, stackTrace) {
       String message = '';
       String identifier = '';
@@ -32,7 +32,11 @@ mixin ErrorHandler on ApiService {
         stackTrace: stackTrace,
       );
 
-      if (e is SocketException) {
+      if (e is AppException) {
+        message = e.message;
+        statusCode = e.statusCode;
+        identifier = '${e.identifier}\nat $endpoint';
+      } else if (e is SocketException) {
         message = 'Unable to connect to the server.';
         statusCode = 0;
         identifier = 'SocketException ${e.message}\nat $endpoint';

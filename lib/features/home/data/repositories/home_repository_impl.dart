@@ -2,6 +2,7 @@ import 'package:riverpod_standard/features/home/domain/repositories/home_reposit
 import 'package:riverpod_standard/shared/models/either.dart';
 import 'package:riverpod_standard/shared/models/paginated_response.dart';
 import 'package:riverpod_standard/core/errors/exceptions.dart';
+import '../../domain/models/product/product_model.dart';
 import '../datasource/home_remote_datasource.dart';
 
 class HomeRepositoryImpl extends HomeRepository {
@@ -9,14 +10,14 @@ class HomeRepositoryImpl extends HomeRepository {
   HomeRepositoryImpl(this.homeDatasource);
 
   @override
-  Future<Either<AppException, PaginatedResponse>> fetchProducts({
+  Future<Either<AppException, PaginatedResponse<Product>>> fetchProducts({
     required int skip,
   }) {
     return homeDatasource.fetchPaginatedProducts(skip: skip);
   }
 
   @override
-  Future<Either<AppException, PaginatedResponse>> searchProducts({
+  Future<Either<AppException, PaginatedResponse<Product>>> searchProducts({
     required int skip,
     required String query,
   }) {

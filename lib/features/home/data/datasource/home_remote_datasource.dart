@@ -1,17 +1,16 @@
 import 'package:riverpod_standard/core/constants/api_constants.dart';
+import 'package:riverpod_standard/core/network/api_response_parser.dart';
+import 'package:riverpod_standard/features/home/domain/models/product/product_model.dart';
 import 'package:riverpod_standard/shared/models/either.dart';
 import 'package:riverpod_standard/shared/models/paginated_response.dart';
 import 'package:riverpod_standard/core/errors/exceptions.dart';
 import '../../../../core/network/api_service.dart';
 
 abstract class HomeDatasource {
-  Future<Either<AppException, PaginatedResponse>> fetchPaginatedProducts({
-    required int skip,
-  });
-  Future<Either<AppException, PaginatedResponse>> searchPaginatedProducts({
-    required int skip,
-    required String query,
-  });
+  Future<Either<AppException, PaginatedResponse<Product>>>
+  fetchPaginatedProducts({required int skip});
+  Future<Either<AppException, PaginatedResponse<Product>>>
+  searchPaginatedProducts({required int skip, required String query});
 }
 
 class HomeRemoteDatasource extends HomeDatasource {
@@ -19,66 +18,39 @@ class HomeRemoteDatasource extends HomeDatasource {
   HomeRemoteDatasource(this.networkService);
 
   @override
-  Future<Either<AppException, PaginatedResponse>> fetchPaginatedProducts({
-    required int skip,
-  }) async {
-    final response = await networkService.get(
+  Future<Either<AppException, PaginatedResponse<Product>>>
+  fetchPaginatedProducts({required int skip}) async {
+    return networkService.get<PaginatedResponse<Product>>(
       ApiConstants.products,
       queryParameters: {
         ApiConstants.skipQuery: skip,
         ApiConstants.limitQuery: ApiConstants.productsPerPage,
       },
+      parser: _parseProductsPage,
     );
-
-    return response.fold((l) => Left(l), (r) {
-      final jsonData = r.data;
-      if (jsonData == null) {
-        return Left(
-          AppException(
-            identifier: 'fetchPaginatedData',
-            statusCode: 0,
-            message: 'The data is not in the valid format.',
-          ),
-        );
-      }
-      final paginatedResponse = PaginatedResponse.fromJson(
-        jsonData,
-        jsonData['products'] ?? [],
-      );
-      return Right(paginatedResponse);
-    });
   }
 
   @override
-  Future<Either<AppException, PaginatedResponse>> searchPaginatedProducts({
-    required int skip,
-    required String query,
-  }) async {
-    final response = await networkService.get(
+  Future<Either<AppException, PaginatedResponse<Product>>>
+  searchPaginatedProducts({required int skip, required String query}) async {
+    return networkService.get<PaginatedResponse<Product>>(
       ApiConstants.searchProducts,
       queryParameters: {
         ApiConstants.searchQuery: query,
         ApiConstants.skipQuery: skip,
         ApiConstants.limitQuery: ApiConstants.productsPerPage,
       },
+      parser: _parseProductsPage,
     );
+  }
 
-    return response.fold((l) => Left(l), (r) {
-      final jsonData = r.data;
-      if (jsonData == null) {
-        return Left(
-          AppException(
-            identifier: 'search PaginatedData',
-            statusCode: 0,
-            message: 'The data is not in the valid format.',
-          ),
-        );
-      }
-      final paginatedResponse = PaginatedResponse.fromJson(
-        jsonData,
-        jsonData['products'] ?? [],
-      );
-      return Right(paginatedResponse);
-    });
+  PaginatedResponse<Product> _parseProductsPage(dynamic json) {
+    final jsonData = coerceJsonMap(json);
+    final products =
+        (jsonData['products'] as List<dynamic>? ?? [])
+            .map((item) => Product.fromJson(coerceJsonMap(item)))
+            .toList();
+
+    return PaginatedResponse<Product>.fromJson(jsonData, products);
   }
 }

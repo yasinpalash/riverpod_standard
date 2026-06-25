@@ -1,6 +1,7 @@
 import 'package:riverpod_standard/core/logging/logging.dart';
 import 'package:riverpod_standard/core/constants/api_constants.dart';
 import 'package:riverpod_standard/core/constants/app_strings.dart';
+import 'package:riverpod_standard/core/network/api_response_parser.dart';
 import '../../../../core/network/api_service.dart';
 import '../../../../shared/models/either.dart';
 import '../../../../shared/models/user_model.dart';
@@ -20,13 +21,13 @@ class LoginUserRemoteDataSource implements LoginUserDataSource {
       final eitherType = await networkService.post(
         ApiConstants.authLogin,
         data: user.toJson(),
+        parser: (json) => User.fromJson(coerceJsonMap(json)),
       );
       return eitherType.fold(
         (exception) {
           return Left(exception);
         },
-        (response) {
-          final user = User.fromJson(response.data);
+        (user) {
           networkService.updateHeader({
             ApiConstants.authorizationHeader: user.token,
           });

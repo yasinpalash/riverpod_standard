@@ -4,63 +4,59 @@ import 'package:riverpod_standard/core/constants/app_constants.dart';
 import 'package:riverpod_standard/core/errors/error_handler.dart';
 import 'package:riverpod_standard/core/errors/exceptions.dart';
 import 'package:riverpod_standard/core/monitoring/error_reporter.dart';
+import 'package:riverpod_standard/core/network/api_response_parser.dart';
+import 'package:riverpod_standard/core/network/api_service.dart';
 import 'package:riverpod_standard/core/network/events/network_event_bus.dart';
 import 'package:riverpod_standard/core/network/interceptors/auth_interceptor.dart';
 import 'package:riverpod_standard/core/network/interceptors/connectivity_interceptor.dart';
 import 'package:riverpod_standard/core/network/interceptors/global_error_interceptor.dart';
-import 'package:riverpod_standard/core/network/api_service.dart';
 import 'package:riverpod_standard/core/services/connectivity_service.dart';
 import 'package:riverpod_standard/core/storage/local_storage_service.dart';
 import 'package:riverpod_standard/shared/models/either.dart';
-import 'package:riverpod_standard/shared/models/base_response.dart';
 
-class ApiClient extends ApiService with ErrorHandler {
-  ApiClient(
-    this.dio, {
+class ApiClient with ErrorHandler implements ApiService {
+  ApiClient({
     required this.baseUrl,
-    required this.enableLogging,
-    required this.connectTimeout,
-    required this.receiveTimeout,
+    required bool enableLogging,
+    required Duration connectTimeout,
+    required Duration receiveTimeout,
     ConnectivityService? connectivityService,
     LocalStorageService? storageService,
     NetworkEventBus? networkEventBus,
     ErrorReporter? errorReporter,
-  }) {
-    if (!AppConstants.isTestMode) {
-      dio.options = dioBaseOptions;
-      if (connectivityService != null) {
-        dio.interceptors.add(ConnectivityInterceptor(connectivityService));
-      }
-      if (storageService != null) {
-        dio.interceptors.add(AuthInterceptor(storageService));
-      }
-      if (networkEventBus != null && errorReporter != null) {
-        dio.interceptors.add(
-          GlobalErrorInterceptor(
-            eventBus: networkEventBus,
-            errorReporter: errorReporter,
-          ),
-        );
-      }
-      if (enableLogging) {
-        dio.interceptors.add(
-          LogInterceptor(requestBody: true, responseBody: true),
-        );
-      }
+    Dio? dio,
+  }) : dio = dio ?? Dio() {
+    this.dio.options = BaseOptions(
+      baseUrl: baseUrl,
+      headers: headers,
+      connectTimeout: connectTimeout,
+      receiveTimeout: receiveTimeout,
+    );
+
+    if (AppConstants.isTestMode) return;
+
+    if (connectivityService != null) {
+      this.dio.interceptors.add(ConnectivityInterceptor(connectivityService));
+    }
+    if (storageService != null) {
+      this.dio.interceptors.add(AuthInterceptor(storageService));
+    }
+    if (networkEventBus != null && errorReporter != null) {
+      this.dio.interceptors.add(
+        GlobalErrorInterceptor(
+          eventBus: networkEventBus,
+          errorReporter: errorReporter,
+        ),
+      );
+    }
+    if (enableLogging) {
+      this.dio.interceptors.add(
+        LogInterceptor(requestBody: true, responseBody: true),
+      );
     }
   }
 
   final Dio dio;
-  final bool enableLogging;
-  final Duration connectTimeout;
-  final Duration receiveTimeout;
-
-  BaseOptions get dioBaseOptions => BaseOptions(
-    baseUrl: baseUrl,
-    headers: headers,
-    connectTimeout: connectTimeout,
-    receiveTimeout: receiveTimeout,
-  );
 
   @override
   final String baseUrl;
@@ -74,33 +70,86 @@ class ApiClient extends ApiService with ErrorHandler {
   @override
   Map<String, dynamic>? updateHeader(Map<String, dynamic> data) {
     final header = {...headers, ...data};
-    if (!AppConstants.isTestMode) {
-      dio.options.headers = header;
-    }
+    dio.options.headers = header;
     return header;
   }
 
   @override
-  Future<Either<AppException, BaseResponse>> get(
+  Future<Either<AppException, T>> get<T>(
     String endpoint, {
     Map<String, dynamic>? queryParameters,
+    required JsonParser<T> parser,
+    bool unwrapEnvelope = false,
   }) {
-    final res = handleException(
+    return handleException<T>(
       () => dio.get(endpoint, queryParameters: queryParameters),
       endpoint: endpoint,
+      parser: parser,
+      unwrapEnvelope: unwrapEnvelope,
     );
-    return res;
   }
 
   @override
-  Future<Either<AppException, BaseResponse>> post(
+  Future<Either<AppException, T>> post<T>(
     String endpoint, {
-    Map<String, dynamic>? data,
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    required JsonParser<T> parser,
+    bool unwrapEnvelope = false,
   }) {
-    final res = handleException(
-      () => dio.post(endpoint, data: data),
+    return handleException<T>(
+      () => dio.post(endpoint, data: data, queryParameters: queryParameters),
       endpoint: endpoint,
+      parser: parser,
+      unwrapEnvelope: unwrapEnvelope,
     );
-    return res;
+  }
+
+  @override
+  Future<Either<AppException, T>> put<T>(
+    String endpoint, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    required JsonParser<T> parser,
+    bool unwrapEnvelope = false,
+  }) {
+    return handleException<T>(
+      () => dio.put(endpoint, data: data, queryParameters: queryParameters),
+      endpoint: endpoint,
+      parser: parser,
+      unwrapEnvelope: unwrapEnvelope,
+    );
+  }
+
+  @override
+  Future<Either<AppException, T>> patch<T>(
+    String endpoint, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    required JsonParser<T> parser,
+    bool unwrapEnvelope = false,
+  }) {
+    return handleException<T>(
+      () => dio.patch(endpoint, data: data, queryParameters: queryParameters),
+      endpoint: endpoint,
+      parser: parser,
+      unwrapEnvelope: unwrapEnvelope,
+    );
+  }
+
+  @override
+  Future<Either<AppException, T>> delete<T>(
+    String endpoint, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    required JsonParser<T> parser,
+    bool unwrapEnvelope = false,
+  }) {
+    return handleException<T>(
+      () => dio.delete(endpoint, data: data, queryParameters: queryParameters),
+      endpoint: endpoint,
+      parser: parser,
+      unwrapEnvelope: unwrapEnvelope,
+    );
   }
 }
