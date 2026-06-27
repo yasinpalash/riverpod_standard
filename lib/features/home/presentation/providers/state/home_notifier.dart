@@ -65,7 +65,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
   }
 
   void updateStateFromResponse(
-    Either<AppException, PaginatedResponse<dynamic>> response,
+    Either<AppException, PaginatedResponse<Product>> response,
   ) {
     response.fold(
       (failure) {
@@ -76,8 +76,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
         );
       },
       (data) {
-        final productList = data.data.map((e) => Product.fromJson(e)).toList();
-        final totalProducts = [...state.productList, ...productList];
+        final totalProducts = [...state.productList, ...data.data];
         state = state.copyWith(
           productList: totalProducts,
           state:

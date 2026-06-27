@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/config/app_config_provider.dart';
 import 'package:riverpod_standard/core/monitoring/error_reporter.dart';
@@ -57,10 +56,8 @@ final apiServiceProvider = Provider<ApiService>((ref) {
   final storageService = ref.watch(storageServiceProvider);
   final networkEventBus = ref.watch(networkEventBusProvider);
   final errorReporter = ref.watch(errorReporterProvider);
-  final dio = Dio();
 
   return ApiClient(
-    dio,
     baseUrl: appConfig.baseUrl,
     enableLogging: appConfig.enableLogging,
     connectTimeout: appConfig.connectTimeout,

@@ -1,7 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:riverpod_standard/core/constants/app_strings.dart';
-import 'package:riverpod_standard/shared/models/either.dart';
-import 'package:riverpod_standard/shared/models/base_response.dart';
 
 class AppException implements Exception {
   final String message;
@@ -46,9 +44,4 @@ class NoInternetException extends Equatable implements AppException {
 
   @override
   List<Object?> get props => [message, statusCode, identifier];
-}
-
-extension HttpExceptionExtension on AppException {
-  Left<AppException, BaseResponse> get toLeft =>
-      Left<AppException, BaseResponse>(this);
 }
