@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:auto_route/annotations.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_standard/core/constants/app_strings.dart';
 import 'package:riverpod_standard/core/constants/route_constants.dart';
 import 'package:riverpod_standard/core/theme/app_motion.dart';
 import 'package:riverpod_standard/core/utils/utils.dart';
@@ -11,6 +11,7 @@ import 'package:riverpod_standard/core/widgets/app_loading.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/home_state_provider.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/state/home_state.dart';
 import 'package:riverpod_standard/shared/providers/app_provider.dart';
+import 'package:riverpod_standard/core/localization/locale_keys.g.dart';
 import '../widgets/home_drawer.dart';
 
 @RoutePage()
@@ -79,7 +80,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ? TextField(
                   style: Theme.of(context).textTheme.bodyMedium,
                   decoration: InputDecoration(
-                    hintText: AppStrings.searchHere,
+                    hintText: LocaleKeys.home_search_here.tr(),
                     hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
@@ -97,7 +98,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   controller: searchController,
                   onChanged: _onSearchChanged,
                 )
-                : const Text(AppStrings.home),
+                : Text(LocaleKeys.home_title).tr(),
         actions: [
           IconButton(
             onPressed: () {
@@ -178,14 +179,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               : AppErrorView(
                 title:
                     state.state == HomeConcreteState.failure
-                        ? AppStrings.somethingWentWrong
-                        : AppStrings.noProductsFound,
+                        ? LocaleKeys.common_something_went_wrong
+                        : LocaleKeys.home_no_products_found,
                 message:
                     state.message.isNotBlank
                         ? state.message
                         : isSearchActive
-                        ? AppStrings.tryDifferentSearchKeyword
-                        : AppStrings.refreshListAndTryAgain,
+                        ? LocaleKeys.home_try_different_search_keyword
+                        : LocaleKeys.home_refresh_list_and_try_again,
                 icon:
                     state.state == HomeConcreteState.failure
                         ? Icons.error_outline
@@ -196,8 +197,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         : Theme.of(context).colorScheme.primary,
                 retryLabel:
                     state.state == HomeConcreteState.failure
-                        ? AppStrings.retry
-                        : AppStrings.refresh,
+                        ? LocaleKeys.common_retry
+                        : LocaleKeys.common_refresh,
                 onRetry: () {
                   unawaited(
                     ref.read(microInteractionServiceProvider).buttonTap(),

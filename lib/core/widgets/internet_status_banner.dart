@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_standard/core/constants/app_strings.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:riverpod_standard/core/localization/locale_keys.g.dart';
 import 'package:riverpod_standard/shared/providers/app_provider.dart';
 
 class InternetStatusBanner extends ConsumerWidget {
@@ -53,15 +54,16 @@ class InternetStatusBanner extends ConsumerWidget {
                         ),
                         const SizedBox(width: 10),
                         Expanded(
-                          child: Text(
-                            AppStrings.noInternetConnection,
-                            style: Theme.of(
-                              context,
-                            ).textTheme.bodyMedium?.copyWith(
-                              color: colorScheme.onInverseSurface,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                          child:
+                              Text(
+                                LocaleKeys.network_no_internet_connection,
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.bodyMedium?.copyWith(
+                                  color: colorScheme.onInverseSurface,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ).tr(),
                         ),
                       ],
                     ),

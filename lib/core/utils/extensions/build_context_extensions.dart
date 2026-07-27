@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:riverpod_standard/core/localization/localization_key.dart';
 
 extension BuildContextX on BuildContext {
   void dismissKeyboard() {
@@ -17,7 +18,7 @@ extension BuildContextX on BuildContext {
     messenger.hideCurrentSnackBar();
     return messenger.showSnackBar(
       SnackBar(
-        content: Text(message),
+        content: Text(translateIfLocalizationKey(message)),
         backgroundColor: backgroundColor,
         behavior: behavior,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

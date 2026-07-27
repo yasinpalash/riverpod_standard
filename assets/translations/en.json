@@ -1,0 +1,37 @@
+{
+  "app": {
+    "title": "Test-Driven Development",
+    "splash": "Splash Screen"
+  },
+  "auth": {
+    "login": "Login",
+    "username": "Username",
+    "password": "Password",
+    "welcome_back": "Welcome Back",
+    "login_subtitle": "Login to continue your journey",
+    "failed_to_parse_login_response": "Failed to parse login response"
+  },
+  "common": {
+    "something_went_wrong": "Something went wrong",
+    "unknown_error_occurred": "Unknown error occurred",
+    "retry": "Retry",
+    "refresh": "Refresh"
+  },
+  "home": {
+    "title": "Home",
+    "search_here": "Search here",
+    "no_products_found": "No products found",
+    "no_more_products_available": "No more products available",
+    "try_different_search_keyword": "Try a different search keyword.",
+    "refresh_list_and_try_again": "Refresh the list and try again."
+  },
+  "network": {
+    "no_internet_connection": "Please check your internet connection and try again."
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "english": "English",
+    "bangla": "Bangla"
+  }
+}

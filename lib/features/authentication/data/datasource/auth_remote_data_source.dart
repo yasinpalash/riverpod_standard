@@ -1,6 +1,6 @@
 import 'package:riverpod_standard/core/logging/logging.dart';
 import 'package:riverpod_standard/core/constants/api_constants.dart';
-import 'package:riverpod_standard/core/constants/app_strings.dart';
+import 'package:riverpod_standard/core/localization/locale_keys.g.dart';
 import 'package:riverpod_standard/core/network/api_response_parser.dart';
 import '../../../../core/network/api_service.dart';
 import '../../../../shared/models/either.dart';
@@ -36,13 +36,13 @@ class LoginUserRemoteDataSource implements LoginUserDataSource {
       );
     } catch (e, stackTrace) {
       AppLogger.error(
-        AppStrings.failedToParseLoginResponse,
+        LocaleKeys.auth_failed_to_parse_login_response,
         error: e,
         stackTrace: stackTrace,
       );
       return Left(
         AppException(
-          message: AppStrings.unknownErrorOccurred,
+          message: LocaleKeys.common_unknown_error_occurred,
           statusCode: 1,
           identifier: '${e.toString()}\nLoginUserRemoteDataSource.loginUser',
         ),

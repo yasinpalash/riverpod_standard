@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:riverpod_standard/core/constants/app_strings.dart';
+import 'package:riverpod_standard/core/localization/locale_keys.g.dart';
 
 class AppException implements Exception {
   final String message;
@@ -37,7 +37,7 @@ class NoInternetException extends Equatable implements AppException {
   String get identifier => 'No internet connection';
 
   @override
-  String get message => AppStrings.noInternetConnection;
+  String get message => LocaleKeys.network_no_internet_connection;
 
   @override
   int get statusCode => 0;

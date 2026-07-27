@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:riverpod_standard/core/localization/locale_keys.g.dart';
+import 'package:riverpod_standard/core/localization/localization_key.dart';
 import 'app_button.dart';
 
 class AppErrorView extends StatelessWidget {
   const AppErrorView({
     super.key,
-    this.title = 'Something went wrong',
-    this.message = 'Error occurred',
+    this.title = LocaleKeys.common_something_went_wrong,
+    this.message = LocaleKeys.common_unknown_error_occurred,
     this.icon = Icons.error_outline,
     this.iconColor,
     this.onRetry,
-    this.retryLabel = 'Retry',
+    this.retryLabel = LocaleKeys.common_retry,
     this.maxWidth = 360,
     this.padding = const EdgeInsets.symmetric(horizontal: 22.0),
   });
@@ -28,6 +30,9 @@ class AppErrorView extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final resolvedIconColor = iconColor ?? colorScheme.error;
+    final resolvedTitle = _translateAppKey(title);
+    final resolvedMessage = _translateAppKey(message);
+    final resolvedRetryLabel = _translateAppKey(retryLabel);
 
     return Center(
       child: Padding(
@@ -49,7 +54,7 @@ class AppErrorView extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                title,
+                resolvedTitle,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w700,
@@ -58,7 +63,7 @@ class AppErrorView extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                message,
+                resolvedMessage,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: colorScheme.onSurface.withValues(alpha: 0.72),
@@ -68,7 +73,7 @@ class AppErrorView extends StatelessWidget {
               if (onRetry != null) ...[
                 const SizedBox(height: 20),
                 AppButton(
-                  label: retryLabel,
+                  label: resolvedRetryLabel,
                   onPressed: onRetry,
                   isFullWidth: false,
                   height: 44,
@@ -81,13 +86,17 @@ class AppErrorView extends StatelessWidget {
       ),
     );
   }
+
+  String _translateAppKey(String value) {
+    return translateIfLocalizationKey(value);
+  }
 }
 
 class AppError extends StatelessWidget {
   const AppError({
     super.key,
-    this.title = 'Something went wrong',
-    this.message = 'Error occurred',
+    this.title = LocaleKeys.common_something_went_wrong,
+    this.message = LocaleKeys.common_unknown_error_occurred,
     this.onRetry,
   });
 

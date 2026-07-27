@@ -1,11 +1,12 @@
 import 'dart:async';
-
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/features/session/presentation/providers/current_user_provider.dart';
 import 'package:riverpod_standard/features/session/presentation/providers/session_provider.dart';
 import 'package:riverpod_standard/shared/providers/app_provider.dart';
+import 'package:riverpod_standard/core/localization/locale_keys.g.dart';
 import '../../../../core/routes/app_route.dart';
 import '../../../../core/theme/app_theme.dart';
 
@@ -72,6 +73,17 @@ class HomeDrawer extends ConsumerWidget {
                   ),
                 ),
               ],
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: Text(LocaleKeys.settings_title).tr(),
+              onTap: () {
+                Navigator.of(context).pop();
+                unawaited(
+                  ref.read(microInteractionServiceProvider).buttonTap(),
+                );
+                context.router.push(const SettingsRoute());
+              },
             ),
           ],
         ),

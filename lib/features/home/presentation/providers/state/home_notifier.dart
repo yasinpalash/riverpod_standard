@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/core/constants/api_constants.dart';
-import 'package:riverpod_standard/core/constants/app_strings.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/state/home_state.dart';
 import 'package:riverpod_standard/shared/models/either.dart';
 import 'package:riverpod_standard/shared/models/paginated_response.dart';
 import 'package:riverpod_standard/features/home/domain/models/product/product_model.dart';
 import 'package:riverpod_standard/core/errors/exceptions.dart';
+import 'package:riverpod_standard/core/localization/locale_keys.g.dart';
 import '../../../domain/repositories/home_repository.dart';
 
 class HomeNotifier extends StateNotifier<HomeState> {
@@ -33,7 +33,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     } else {
       state = state.copyWith(
         state: HomeConcreteState.fetchedAllProducts,
-        message: AppStrings.noMoreProductsAvailable,
+        message: LocaleKeys.home_no_more_products_available,
         isLoading: false,
       );
     }
@@ -58,7 +58,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     } else {
       state = state.copyWith(
         state: HomeConcreteState.fetchedAllProducts,
-        message: AppStrings.noMoreProductsAvailable,
+        message: LocaleKeys.home_no_more_products_available,
         isLoading: false,
       );
     }
@@ -84,7 +84,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
                   ? HomeConcreteState.fetchedAllProducts
                   : HomeConcreteState.loaded,
           hasData: true,
-          message: totalProducts.isEmpty ? AppStrings.noProductsFound : '',
+          message:
+              totalProducts.isEmpty ? LocaleKeys.home_no_products_found : '',
           page: totalProducts.length ~/ ApiConstants.productsPerPage,
           total: data.total,
           isLoading: false,

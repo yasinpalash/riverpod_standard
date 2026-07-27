@@ -1,15 +1,16 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_standard/core/constants/app_strings.dart';
 import 'package:riverpod_standard/core/constants/route_constants.dart';
 import 'package:riverpod_standard/core/utils/utils.dart';
 import 'package:riverpod_standard/core/widgets/app_button.dart';
 import 'package:riverpod_standard/features/authentication/presentation/providers/auth_providers.dart';
 import 'package:riverpod_standard/features/authentication/presentation/providers/state/auth_state.dart';
 import 'package:riverpod_standard/shared/providers/app_provider.dart';
+import 'package:riverpod_standard/core/localization/locale_keys.g.dart';
 import '../../../../core/routes/app_route.dart';
 import '../widgets/auth_field.dart';
 
@@ -57,7 +58,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }));
 
     return Scaffold(
-      appBar: AppBar(title: const Text(AppStrings.appTitle)),
+      appBar: AppBar(title: Text(LocaleKeys.app_title).tr()),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -95,24 +96,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 40),
-                    const Text(
-                      AppStrings.welcomeBack,
+                    Text(
+                      LocaleKeys.auth_welcome_back,
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF2D3142),
                         letterSpacing: -0.5,
                       ),
-                    ),
+                    ).tr(),
                     const SizedBox(height: 8),
-                    const Text(
-                      AppStrings.loginSubtitle,
+                    Text(
+                      LocaleKeys.auth_login_subtitle,
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                       ),
-                    ),
+                    ).tr(),
                     const SizedBox(height: 48),
                     Container(
                       padding: const EdgeInsets.all(24),
@@ -134,14 +135,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             child: Column(
                               children: [
                                 AuthField(
-                                  hintText: AppStrings.username,
+                                  hintText: LocaleKeys.auth_username.tr(),
                                   controller: usernameController,
                                   validator: AppValidator.validateUsername,
                                   textInputAction: TextInputAction.next,
                                 ),
                                 const SizedBox(height: 16),
                                 AuthField(
-                                  hintText: AppStrings.password,
+                                  hintText: LocaleKeys.auth_password.tr(),
                                   obscureText: true,
                                   controller: passwordController,
                                   validator: AppValidator.validatePassword,
@@ -174,7 +175,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Widget loginButton({required bool isLoading}) {
     return AppButton(
-      label: AppStrings.login,
+      label: LocaleKeys.auth_login.tr(),
       onPressed: login,
       isLoading: isLoading,
     );

@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_standard/core/localization/locale_keys.g.dart';
+import 'package:riverpod_standard/core/localization/localization_key.dart';
+import 'package:riverpod_standard/core/localization/locale_provider.dart';
 import 'package:riverpod_standard/core/network/events/network_event.dart';
 import 'package:riverpod_standard/features/session/presentation/providers/session_provider.dart';
 import 'package:riverpod_standard/shared/providers/app_provider.dart';
@@ -24,6 +28,15 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     final appConfig = ref.watch(appConfigProvider);
     final themeMode = ref.watch(appThemeProvider);
+    final locale = ref.watch(localeProvider);
+
+    ref.listen<Locale>(localeProvider, (previous, next) {
+      if (next == previous) {
+        return;
+      }
+
+      unawaited(context.setLocale(next));
+    });
 
     ref.listen(networkEventProvider, (_, next) {
       final event = next.valueOrNull;
@@ -45,9 +58,13 @@ class _MyAppState extends ConsumerState<MyApp> {
 
     return MaterialApp.router(
       title: appConfig.appName,
+      onGenerateTitle: (_) => LocaleKeys.app_title.tr(),
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
+      locale: locale,
+      supportedLocales: context.supportedLocales,
+      localizationsDelegates: context.localizationDelegates,
       routeInformationParser: _appRouter.defaultRouteParser(),
       routerDelegate: _appRouter.delegate(),
       debugShowCheckedModeBanner: !appConfig.isProd,
@@ -70,7 +87,9 @@ class _MyAppState extends ConsumerState<MyApp> {
 
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(message)));
+        ..showSnackBar(
+          SnackBar(content: Text(translateIfLocalizationKey(message))),
+        );
     });
   }
 }

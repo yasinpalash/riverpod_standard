@@ -1,6 +1,6 @@
 import 'package:riverpod_standard/config/app_config.dart';
 import 'package:riverpod_standard/config/app_environment.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('flavor config', () {
