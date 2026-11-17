@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../session/presentation/providers/session_provider.dart';
+import 'package:riverpod_standard/core/usecases/usecase.dart';
+import 'package:riverpod_standard/features/session/di/session_di.dart';
 
-final userLoginCheckProvider = FutureProvider((ref) async {
-  final repo = ref.watch(sessionRepositoryProvider);
-  return await repo.hasUser();
+final userLoginCheckProvider = FutureProvider<bool>((ref) async {
+  final result = await ref.watch(hasSessionProvider)(const NoParams());
+  return result.fold((_) => false, (hasUser) => hasUser);
 });

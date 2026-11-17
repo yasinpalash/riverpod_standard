@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'app_button.dart';
+import 'package:riverpod_standard/core/widgets/app_button.dart';
 
 class AppErrorView extends StatelessWidget {
   const AppErrorView({

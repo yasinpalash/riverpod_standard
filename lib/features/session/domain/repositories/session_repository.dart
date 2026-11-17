@@ -1,10 +1,9 @@
-import '../../../../shared/models/either.dart';
-import '../../../../shared/models/user_model.dart';
-import '../../../../core/errors/exceptions.dart';
+import 'package:riverpod_standard/core/typedefs/typedefs.dart';
+import 'package:riverpod_standard/features/session/domain/entities/user.dart';
 
 abstract class SessionRepository {
-  Future<Either<AppException, User>> fetchUser();
-  Future<bool> saveUser({required User user});
-  Future<bool> deleteUser();
-  Future<bool> hasUser();
+  ResultFuture<User> fetchUser();
+  ResultFuture<void> saveUser(User user);
+  ResultFuture<void> deleteUser();
+  ResultFuture<bool> hasUser();
 }

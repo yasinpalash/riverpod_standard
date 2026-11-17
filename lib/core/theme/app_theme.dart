@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_standard/core/constants/app_colors.dart';
+import 'package:riverpod_standard/core/constants/storage_keys.dart';
 import 'package:riverpod_standard/core/storage/local_storage_service.dart';
-import '../constants/app_colors.dart';
-import '../constants/storage_keys.dart';
-import '../../shared/providers/app_provider.dart';
-import 'custom_themes/app_bar_theme.dart';
-import 'custom_themes/app_text_styles.dart';
-import 'custom_themes/elevated_button_theme.dart';
-import 'custom_themes/text_field_theme.dart';
-import 'custom_themes/text_theme.dart';
+import 'package:riverpod_standard/core/theme/custom_themes/app_bar_theme.dart';
+import 'package:riverpod_standard/core/theme/custom_themes/app_text_styles.dart';
+import 'package:riverpod_standard/core/theme/custom_themes/elevated_button_theme.dart';
+import 'package:riverpod_standard/core/theme/custom_themes/text_field_theme.dart';
+import 'package:riverpod_standard/core/theme/custom_themes/text_theme.dart';
+import 'package:riverpod_standard/shared/providers/app_provider.dart';
 
-final appThemeProvider = StateNotifierProvider<AppThemeModeNotifier, ThemeMode>(
-  (ref) {
-    final storage = ref.watch(storageServiceProvider);
-    return AppThemeModeNotifier(storage);
-  },
+final appThemeProvider = NotifierProvider<AppThemeModeNotifier, ThemeMode>(
+  AppThemeModeNotifier.new,
 );
 
-class AppThemeModeNotifier extends StateNotifier<ThemeMode> {
-  final LocalStorageService storageService;
-  ThemeMode currentTheme = ThemeMode.light;
-  AppThemeModeNotifier(this.storageService) : super(ThemeMode.light) {
-    getCurrentTheme();
+class AppThemeModeNotifier extends Notifier<ThemeMode> {
+  late final LocalStorageService storageService;
+
+  @override
+  ThemeMode build() {
+    storageService = ref.watch(storageServiceProvider);
+    Future.microtask(getCurrentTheme);
+    return ThemeMode.light;
   }
 
   void toggleTheme() {
@@ -31,8 +31,7 @@ class AppThemeModeNotifier extends StateNotifier<ThemeMode> {
 
   void getCurrentTheme() async {
     final theme = await storageService.get(StorageKeys.currentTheme);
-    final value = ThemeMode.values.byName('${theme ?? 'light'}');
-    state = value;
+    state = ThemeMode.values.byName('${theme ?? 'light'}');
   }
 }
 

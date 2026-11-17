@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_standard/core/routes/app_route.dart';
+import 'package:riverpod_standard/core/theme/app_theme.dart';
 import 'package:riverpod_standard/features/session/presentation/providers/current_user_provider.dart';
 import 'package:riverpod_standard/features/session/presentation/providers/session_provider.dart';
 import 'package:riverpod_standard/shared/providers/app_provider.dart';
-import '../../../../core/routes/app_route.dart';
-import '../../../../core/theme/app_theme.dart';
 
 class HomeDrawer extends ConsumerWidget {
   const HomeDrawer({super.key});
@@ -42,11 +42,14 @@ class HomeDrawer extends ConsumerWidget {
                     unawaited(
                       ref.read(microInteractionServiceProvider).warning(),
                     );
-                    await ref.read(sessionRepositoryProvider).deleteUser();
+                    await ref.read(logoutProvider)();
                     if (!context.mounted) return;
-                    AutoRouter.of(
-                      context,
-                    ).pushAndPopUntil(LoginRoute(), predicate: (_) => false);
+                    unawaited(
+                      AutoRouter.of(context).pushAndPopUntil(
+                        const LoginRoute(),
+                        predicate: (_) => false,
+                      ),
+                    );
                   },
                   child: CircleAvatar(
                     child: Icon(

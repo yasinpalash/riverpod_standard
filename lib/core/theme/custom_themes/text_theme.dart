@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../core/constants/app_colors.dart';
-import 'app_text_styles.dart';
+import 'package:riverpod_standard/core/constants/app_colors.dart';
+import 'package:riverpod_standard/core/theme/custom_themes/app_text_styles.dart';
 
 class TextThemes {
   static TextTheme get baseTextTheme {

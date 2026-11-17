@@ -1,31 +1,31 @@
+import 'package:riverpod_standard/core/errors/exception_mapper.dart';
 import 'package:riverpod_standard/core/errors/exceptions.dart';
+import 'package:riverpod_standard/core/typedefs/typedefs.dart';
+import 'package:riverpod_standard/features/session/data/datasources/session_local_data_source.dart';
+import 'package:riverpod_standard/features/session/data/models/user_model.dart';
+import 'package:riverpod_standard/features/session/domain/entities/user.dart';
 import 'package:riverpod_standard/features/session/domain/repositories/session_repository.dart';
-import 'package:riverpod_standard/shared/models/either.dart';
-import 'package:riverpod_standard/shared/models/user_model.dart';
-import '../datasources/session_local_data_source.dart';
 
-class SessionRepositoryImpl extends SessionRepository {
-  SessionRepositoryImpl(this.dataSource);
-
-  final SessionLocalDataSource dataSource;
+class SessionRepositoryImpl implements SessionRepository {
+  const SessionRepositoryImpl(this._dataSource);
+  final SessionLocalDataSource _dataSource;
 
   @override
-  Future<bool> deleteUser() {
-    return dataSource.deleteUser();
-  }
+  ResultFuture<User> fetchUser() =>
+      ExceptionMapper.guard(() async => (await _dataSource.fetchUser()).toEntity());
 
   @override
-  Future<Either<AppException, User>> fetchUser() {
-    return dataSource.fetchUser();
-  }
+  ResultFuture<void> saveUser(User user) => ExceptionMapper.guard(() async {
+    final saved = await _dataSource.saveUser(UserModel.fromEntity(user));
+    if (!saved) throw CacheFailureException();
+  });
 
   @override
-  Future<bool> hasUser() {
-    return dataSource.hasUser();
-  }
+  ResultFuture<void> deleteUser() =>
+      ExceptionMapper.guard(() async {
+        await _dataSource.deleteUser();
+      });
 
   @override
-  Future<bool> saveUser({required User user}) {
-    return dataSource.saveUser(user: user);
-  }
+  ResultFuture<bool> hasUser() => ExceptionMapper.guard(_dataSource.hasUser);
 }

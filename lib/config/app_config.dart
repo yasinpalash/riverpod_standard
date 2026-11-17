@@ -1,4 +1,4 @@
-import 'app_environment.dart';
+import 'package:riverpod_standard/config/app_environment.dart';
 
 class AppConfig {
   const AppConfig({

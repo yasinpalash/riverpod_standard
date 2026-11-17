@@ -1,92 +1,78 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_standard/core/constants/api_constants.dart';
-import 'package:riverpod_standard/core/constants/app_strings.dart';
+import 'package:riverpod_standard/core/typedefs/typedefs.dart';
+import 'package:riverpod_standard/features/home/di/home_di.dart';
+import 'package:riverpod_standard/features/home/domain/entities/product_listing.dart';
+import 'package:riverpod_standard/features/home/domain/usecases/product_usecases.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/state/home_state.dart';
-import 'package:riverpod_standard/shared/models/either.dart';
-import 'package:riverpod_standard/shared/models/paginated_response.dart';
-import 'package:riverpod_standard/features/home/domain/models/product/product_model.dart';
-import 'package:riverpod_standard/core/errors/exceptions.dart';
-import '../../../domain/repositories/home_repository.dart';
 
-class HomeNotifier extends StateNotifier<HomeState> {
-  final HomeRepository homeRepository;
-
-  HomeNotifier(this.homeRepository) : super(const HomeState.initial());
-  bool get isFetching =>
-      state.state != HomeConcreteState.loading &&
-      state.state != HomeConcreteState.fetchingMore;
-
-  Future<void> fetchProducts() async {
-    if (isFetching && state.state != HomeConcreteState.fetchedAllProducts) {
-      state = state.copyWith(
-        state:
-            state.page > 0
-                ? HomeConcreteState.fetchingMore
-                : HomeConcreteState.loading,
-        isLoading: true,
-      );
-
-      final response = await homeRepository.fetchProducts(
-        skip: state.page * ApiConstants.productsPerPage,
-      );
-      updateStateFromResponse(response);
-    } else {
-      state = state.copyWith(
-        state: HomeConcreteState.fetchedAllProducts,
-        message: AppStrings.noMoreProductsAvailable,
-        isLoading: false,
-      );
-    }
+class HomeNotifier extends Notifier<HomeState> {
+  @override
+  HomeState build() {
+    Future.microtask(fetchProducts);
+    return const HomeState.initial();
   }
 
-  Future<void> searchProducts(String query) async {
-    if (isFetching && state.state != HomeConcreteState.fetchedAllProducts) {
-      state = state.copyWith(
-        state:
-            state.page > 0
-                ? HomeConcreteState.fetchingMore
-                : HomeConcreteState.loading,
-        isLoading: true,
-      );
+  ProductListing get _listing =>
+      state.hasData
+          ? ProductListing(products: state.productList, total: state.total)
+          : const ProductListing();
 
-      final response = await homeRepository.searchProducts(
-        skip: state.page * ApiConstants.productsPerPage,
-        query: query,
-      );
+  bool get _isBusy =>
+      state.state == HomeConcreteState.loading ||
+      state.state == HomeConcreteState.fetchingMore;
 
-      updateStateFromResponse(response);
-    } else {
+  Future<void> fetchProducts() => _load(
+    (listing) => ref.read(fetchProductsProvider)(listing),
+  );
+
+  Future<void> searchProducts(String query) => _load(
+    (listing) => ref.read(searchProductsProvider)(
+      SearchProductsParams(current: listing, query: query),
+    ),
+  );
+
+  Future<void> _load(
+    ResultFuture<ProductListing> Function(ProductListing listing) load,
+  ) async {
+    if (_isBusy) return;
+    final listing = _listing;
+    if (!listing.hasMore) {
       state = state.copyWith(
-        state: HomeConcreteState.fetchedAllProducts,
-        message: AppStrings.noMoreProductsAvailable,
+        state: HomeConcreteState.endReached,
         isLoading: false,
       );
+      return;
     }
+
+    state = state.copyWith(
+      errorMessage: '',
+      state:
+          listing.isEmpty
+              ? HomeConcreteState.loading
+              : HomeConcreteState.fetchingMore,
+      isLoading: true,
+    );
+    _apply(await load(listing));
   }
 
-  void updateStateFromResponse(
-    Either<AppException, PaginatedResponse<Product>> response,
-  ) {
-    response.fold(
+  void _apply(Result<ProductListing> result) {
+    result.fold(
       (failure) {
         state = state.copyWith(
           state: HomeConcreteState.failure,
-          message: failure.message,
+          errorMessage: failure.message,
           isLoading: false,
         );
       },
-      (data) {
-        final totalProducts = [...state.productList, ...data.data];
+      (listing) {
         state = state.copyWith(
-          productList: totalProducts,
+          productList: listing.products,
           state:
-              totalProducts.length == data.total
-                  ? HomeConcreteState.fetchedAllProducts
-                  : HomeConcreteState.loaded,
+              listing.hasMore
+                  ? HomeConcreteState.loaded
+                  : HomeConcreteState.fetchedAllProducts,
           hasData: true,
-          message: totalProducts.isEmpty ? AppStrings.noProductsFound : '',
-          page: totalProducts.length ~/ ApiConstants.productsPerPage,
-          total: data.total,
+          total: listing.total ?? 0,
           isLoading: false,
         );
       },

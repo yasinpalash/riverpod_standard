@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app_loading.dart';
+import 'package:riverpod_standard/core/widgets/app_loading.dart';
 
 class AppButton extends StatelessWidget {
   const AppButton({

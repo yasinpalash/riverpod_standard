@@ -10,9 +10,9 @@ import 'package:riverpod_standard/core/network/events/network_event_bus.dart';
 import 'package:riverpod_standard/core/network/interceptors/auth_interceptor.dart';
 import 'package:riverpod_standard/core/network/interceptors/connectivity_interceptor.dart';
 import 'package:riverpod_standard/core/network/interceptors/global_error_interceptor.dart';
+import 'package:riverpod_standard/core/result/either.dart';
 import 'package:riverpod_standard/core/services/connectivity_service.dart';
-import 'package:riverpod_standard/core/storage/local_storage_service.dart';
-import 'package:riverpod_standard/shared/models/either.dart';
+import 'package:riverpod_standard/core/storage/secure_storage_service.dart';
 
 class ApiClient with ErrorHandler implements ApiService {
   ApiClient({
@@ -21,7 +21,7 @@ class ApiClient with ErrorHandler implements ApiService {
     required Duration connectTimeout,
     required Duration receiveTimeout,
     ConnectivityService? connectivityService,
-    LocalStorageService? storageService,
+    SecureStorageService? storageService,
     NetworkEventBus? networkEventBus,
     ErrorReporter? errorReporter,
     Dio? dio,

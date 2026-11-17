@@ -1,7 +1,9 @@
-import 'package:riverpod_standard/shared/models/either.dart';
-import 'package:riverpod_standard/shared/models/user_model.dart';
-import 'package:riverpod_standard/core/errors/exceptions.dart';
+import 'package:riverpod_standard/core/typedefs/typedefs.dart';
+import 'package:riverpod_standard/features/session/domain/entities/user.dart';
 
 abstract class AuthenticationRepository {
-  Future<Either<AppException, User>> loginUser({required User user});
+  ResultFuture<User> loginUser({
+    required String username,
+    required String password,
+  });
 }

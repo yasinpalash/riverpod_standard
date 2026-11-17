@@ -1,14 +1,14 @@
-import 'package:riverpod_standard/shared/models/either.dart';
-import 'package:riverpod_standard/shared/models/paginated_response.dart';
-import 'package:riverpod_standard/core/errors/exceptions.dart';
-import '../models/product/product_model.dart';
+import 'package:riverpod_standard/core/typedefs/typedefs.dart';
+import 'package:riverpod_standard/features/home/domain/entities/product_page.dart';
 
 abstract class HomeRepository {
-  Future<Either<AppException, PaginatedResponse<Product>>> fetchProducts({
+  ResultFuture<ProductPage> fetchProducts({
     required int skip,
+    required int limit,
   });
-  Future<Either<AppException, PaginatedResponse<Product>>> searchProducts({
+  ResultFuture<ProductPage> searchProducts({
     required int skip,
+    required int limit,
     required String query,
   });
 }

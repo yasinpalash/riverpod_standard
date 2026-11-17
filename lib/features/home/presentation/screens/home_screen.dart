@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,8 +11,8 @@ import 'package:riverpod_standard/core/widgets/app_error_view.dart';
 import 'package:riverpod_standard/core/widgets/app_loading.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/home_state_provider.dart';
 import 'package:riverpod_standard/features/home/presentation/providers/state/home_state.dart';
+import 'package:riverpod_standard/features/home/presentation/widgets/home_drawer.dart';
 import 'package:riverpod_standard/shared/providers/app_provider.dart';
-import '../widgets/home_drawer.dart';
 
 @RoutePage()
 class HomeScreen extends ConsumerStatefulWidget {
@@ -65,10 +66,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       HomeState? previous,
       HomeState next,
     ) {
-      if (next.state == HomeConcreteState.fetchedAllProducts) {
-        if (next.message.isNotBlank) {
-          context.showSnackBar(next.message);
-        }
+      if (next.state == HomeConcreteState.endReached) {
+        context.showSnackBar(AppStrings.noMoreProductsAvailable);
       }
     }));
 
@@ -163,7 +162,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
                           );
                         },
-                        separatorBuilder: (_, __) => const Divider(),
+                        separatorBuilder: (_, _) => const Divider(),
                         itemCount: state.productList.length,
                       ),
                     ),
@@ -181,8 +180,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ? AppStrings.somethingWentWrong
                         : AppStrings.noProductsFound,
                 message:
-                    state.message.isNotBlank
-                        ? state.message
+                    state.errorMessage.isNotBlank
+                        ? state.errorMessage
                         : isSearchActive
                         ? AppStrings.tryDifferentSearchKeyword
                         : AppStrings.refreshListAndTryAgain,
@@ -209,7 +208,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  _onSearchChanged(String query) {
+  void _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       ref.read(homeNotifierProvider.notifier).searchProducts(query);

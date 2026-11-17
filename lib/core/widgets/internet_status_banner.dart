@@ -8,7 +8,7 @@ class InternetStatusBanner extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final hasConnection = ref.watch(connectivityStatusProvider).valueOrNull;
+    final hasConnection = ref.watch(connectivityStatusProvider).value;
     final showBanner = hasConnection == false;
     final colorScheme = Theme.of(context).colorScheme;
 

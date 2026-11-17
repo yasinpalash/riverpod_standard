@@ -64,7 +64,7 @@ class AppTextFormFieldTheme {
         errorBorderColor: Colors.red,
         focusedErrorBorderColor: Colors.orange,
         borderRadius: BorderRadius.circular(14),
-        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       );
 
   static final InputDecorationTheme darkInputDecorationTheme =
@@ -81,6 +81,6 @@ class AppTextFormFieldTheme {
         errorBorderColor: Colors.redAccent,
         focusedErrorBorderColor: Colors.orangeAccent,
         borderRadius: BorderRadius.circular(14),
-        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       );
 }

@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/core/constants/app_strings.dart';
 import 'package:riverpod_standard/core/constants/route_constants.dart';
+import 'package:riverpod_standard/core/routes/app_route.dart';
 import 'package:riverpod_standard/core/utils/utils.dart';
 import 'package:riverpod_standard/core/widgets/app_button.dart';
-import 'package:riverpod_standard/features/authentication/presentation/providers/auth_providers.dart';
+import 'package:riverpod_standard/features/authentication/presentation/providers/auth_provider.dart';
 import 'package:riverpod_standard/features/authentication/presentation/providers/state/auth_state.dart';
+import 'package:riverpod_standard/features/authentication/presentation/widgets/auth_field.dart';
 import 'package:riverpod_standard/shared/providers/app_provider.dart';
-import '../../../../core/routes/app_route.dart';
-import '../widgets/auth_field.dart';
 
 @RoutePage()
 class LoginScreen extends ConsumerStatefulWidget {
@@ -45,10 +45,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       previous,
       next,
     ) {
-      if (next is Failure) {
+      if (next is AuthFailure) {
         unawaited(ref.read(microInteractionServiceProvider).error());
-        context.showErrorSnackBar(next.exception.message.toString());
-      } else if (next is Success) {
+        context.showErrorSnackBar(next.failure.message.toString());
+      } else if (next is AuthSuccess) {
         unawaited(ref.read(microInteractionServiceProvider).success());
         AutoRouter.of(
           context,
@@ -153,10 +153,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                           const SizedBox(height: 12),
                           loginButton(
-                            isLoading: state.maybeMap(
-                              loading: (_) => true,
-                              orElse: () => false,
-                            ),
+                            isLoading: state is AuthLoading,
                           ),
                         ],
                       ),
@@ -190,7 +187,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     ref
         .read(authStateNotifierProvider.notifier)
-        .loginUser(
+        .login(
           AppHelper.normalizeWhitespace(usernameController.text),
           passwordController.text.trim(),
         );

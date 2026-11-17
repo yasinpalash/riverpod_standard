@@ -1,26 +1,36 @@
+import 'package:riverpod_standard/core/errors/exception_mapper.dart';
+import 'package:riverpod_standard/core/typedefs/typedefs.dart';
+import 'package:riverpod_standard/features/home/data/datasources/home_remote_data_source.dart';
+import 'package:riverpod_standard/features/home/domain/entities/product_page.dart';
 import 'package:riverpod_standard/features/home/domain/repositories/home_repository.dart';
-import 'package:riverpod_standard/shared/models/either.dart';
-import 'package:riverpod_standard/shared/models/paginated_response.dart';
-import 'package:riverpod_standard/core/errors/exceptions.dart';
-import '../../domain/models/product/product_model.dart';
-import '../datasource/home_remote_datasource.dart';
 
-class HomeRepositoryImpl extends HomeRepository {
-  final HomeDatasource homeDatasource;
-  HomeRepositoryImpl(this.homeDatasource);
+class HomeRepositoryImpl implements HomeRepository {
+  const HomeRepositoryImpl(this._datasource);
+  final HomeDatasource _datasource;
 
   @override
-  Future<Either<AppException, PaginatedResponse<Product>>> fetchProducts({
+  ResultFuture<ProductPage> fetchProducts({
     required int skip,
-  }) {
-    return homeDatasource.fetchPaginatedProducts(skip: skip);
-  }
+    required int limit,
+  }) => ExceptionMapper.guard(() async {
+    final page = await _datasource.fetchPaginatedProducts(
+      skip: skip,
+      limit: limit,
+    );
+    return page.toEntity();
+  });
 
   @override
-  Future<Either<AppException, PaginatedResponse<Product>>> searchProducts({
+  ResultFuture<ProductPage> searchProducts({
     required int skip,
+    required int limit,
     required String query,
-  }) {
-    return homeDatasource.searchPaginatedProducts(skip: skip, query: query);
-  }
+  }) => ExceptionMapper.guard(() async {
+    final page = await _datasource.searchPaginatedProducts(
+      skip: skip,
+      limit: limit,
+      query: query,
+    );
+    return page.toEntity();
+  });
 }

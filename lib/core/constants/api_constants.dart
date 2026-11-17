@@ -15,5 +15,4 @@ class ApiConstants {
   static const String limitQuery = 'limit';
   static const String searchQuery = 'q';
 
-  static const int productsPerPage = 20;
 }

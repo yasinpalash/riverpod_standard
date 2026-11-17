@@ -1,14 +1,15 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_standard/config/app_config_provider.dart';
 import 'package:riverpod_standard/core/network/events/network_event.dart';
+import 'package:riverpod_standard/core/routes/app_route.dart';
+import 'package:riverpod_standard/core/system/system_ui_config.dart';
+import 'package:riverpod_standard/core/theme/app_theme.dart';
+import 'package:riverpod_standard/core/widgets/internet_status_banner.dart';
 import 'package:riverpod_standard/features/session/presentation/providers/session_provider.dart';
 import 'package:riverpod_standard/shared/providers/app_provider.dart';
-import '../config/app_config_provider.dart';
-import '../core/routes/app_route.dart';
-import '../core/system/system_ui_config.dart';
-import '../core/theme/app_theme.dart';
-import '../core/widgets/internet_status_banner.dart';
 
 class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
@@ -26,15 +27,15 @@ class _MyAppState extends ConsumerState<MyApp> {
     final themeMode = ref.watch(appThemeProvider);
 
     ref.listen(networkEventProvider, (_, next) {
-      final event = next.valueOrNull;
+      final event = next.value;
       if (event == null) {
         return;
       }
 
       switch (event.type) {
         case NetworkEventType.unauthorized:
-          unawaited(ref.read(sessionRepositoryProvider).deleteUser());
-          unawaited(_appRouter.replaceAll([LoginRoute()]));
+          unawaited(ref.read(logoutProvider)());
+          unawaited(_appRouter.replaceAll([const LoginRoute()]));
           _showSnackBar(context, event.message);
           break;
         case NetworkEventType.serverError:
@@ -48,8 +49,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
-      routeInformationParser: _appRouter.defaultRouteParser(),
-      routerDelegate: _appRouter.delegate(),
+      routerConfig: _appRouter.config(),
       debugShowCheckedModeBanner: !appConfig.isProd,
       builder: (context, child) {
         return AnnotatedRegion(

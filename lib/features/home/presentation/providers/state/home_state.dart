@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../../domain/models/product/product_model.dart';
+import 'package:riverpod_standard/features/home/domain/entities/product.dart';
 
 enum HomeConcreteState {
   initial,
@@ -8,60 +8,57 @@ enum HomeConcreteState {
   failure,
   fetchingMore,
   fetchedAllProducts,
+  endReached,
 }
 
 class HomeState extends Equatable {
   final List<Product> productList;
   final int total;
-  final int page;
   final bool hasData;
   final HomeConcreteState state;
-  final String message;
+  /// Failure text from the domain/data layer; empty when there is no error.
+  final String errorMessage;
   final bool isLoading;
   const HomeState({
     this.productList = const [],
     this.isLoading = false,
     this.hasData = false,
     this.state = HomeConcreteState.initial,
-    this.message = '',
-    this.page = 0,
+    this.errorMessage = '',
     this.total = 0,
   });
   const HomeState.initial({
     this.productList = const [],
     this.total = 0,
-    this.page = 0,
     this.isLoading = false,
     this.hasData = false,
     this.state = HomeConcreteState.initial,
-    this.message = '',
+    this.errorMessage = '',
   });
 
   HomeState copyWith({
     List<Product>? productList,
     int? total,
-    int? page,
     bool? hasData,
     HomeConcreteState? state,
-    String? message,
+    String? errorMessage,
     bool? isLoading,
   }) {
     return HomeState(
       isLoading: isLoading ?? this.isLoading,
       productList: productList ?? this.productList,
       total: total ?? this.total,
-      page: page ?? this.page,
       hasData: hasData ?? this.hasData,
       state: state ?? this.state,
-      message: message ?? this.message,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
   String toString() {
-    return 'HomeState(isLoading:$isLoading, productLength: ${productList.length},total:$total page: $page, hasData: $hasData, state: $state, message: $message)';
+    return 'HomeState(isLoading:$isLoading, productLength: ${productList.length},total:$total, hasData: $hasData, state: $state, errorMessage: $errorMessage)';
   }
 
   @override
-  List<Object?> get props => [productList, page, hasData, state, message];
+  List<Object?> get props => [productList, total, hasData, state, errorMessage];
 }

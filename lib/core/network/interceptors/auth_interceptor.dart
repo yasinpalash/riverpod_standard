@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:riverpod_standard/core/constants/api_constants.dart';
 import 'package:riverpod_standard/core/constants/storage_keys.dart';
-import 'package:riverpod_standard/core/storage/local_storage_service.dart';
+import 'package:riverpod_standard/core/storage/secure_storage_service.dart';
 
 class AuthInterceptor extends Interceptor {
   AuthInterceptor(this._storageService);
 
-  final LocalStorageService _storageService;
+  final SecureStorageService _storageService;
 
   @override
   Future<void> onRequest(
@@ -26,13 +26,13 @@ class AuthInterceptor extends Interceptor {
   }
 
   Future<String?> _readToken() async {
-    final accessToken = await _storageService.get(StorageKeys.accessToken);
-    if (accessToken is String && accessToken.isNotEmpty) {
+    final accessToken = await _storageService.read(StorageKeys.accessToken);
+    if (accessToken != null && accessToken.isNotEmpty) {
       return accessToken;
     }
 
-    final userJson = await _storageService.get(StorageKeys.user);
-    if (userJson is! String || userJson.isEmpty) {
+    final userJson = await _storageService.read(StorageKeys.user);
+    if (userJson == null || userJson.isEmpty) {
       return null;
     }
 

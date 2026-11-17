@@ -30,7 +30,7 @@ class AppElevatedButtonTheme {
         ),
         side: WidgetStateProperty.all(BorderSide(color: borderColor)),
         padding: WidgetStatePropertyAll(padding),
-        textStyle: WidgetStatePropertyAll(
+        textStyle: const WidgetStatePropertyAll(
           TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         shape: WidgetStateProperty.all(
@@ -46,7 +46,7 @@ class AppElevatedButtonTheme {
     defaultBackgroundColor: AppColors.primary,
     disabledBackgroundColor: Colors.grey.shade300,
     borderColor: Colors.blue,
-    padding: EdgeInsets.symmetric(vertical: 18),
+    padding: const EdgeInsets.symmetric(vertical: 18),
     borderRadius: BorderRadius.circular(12),
   );
 
@@ -56,7 +56,7 @@ class AppElevatedButtonTheme {
     defaultBackgroundColor: AppColors.primary,
     disabledBackgroundColor: Colors.grey.shade800,
     borderColor: Colors.blueGrey,
-    padding: EdgeInsets.symmetric(vertical: 18),
+    padding: const EdgeInsets.symmetric(vertical: 18),
     borderRadius: BorderRadius.circular(12),
   );
 }

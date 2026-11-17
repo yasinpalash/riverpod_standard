@@ -1,55 +1,54 @@
 import 'dart:convert';
-import '../../../../core/constants/storage_keys.dart';
-import '../../../../core/storage/local_storage_service.dart';
-import '../../../../shared/models/either.dart';
-import '../../../../shared/models/user_model.dart';
-import '../../../../core/errors/exceptions.dart';
+import 'package:riverpod_standard/core/constants/storage_keys.dart';
+import 'package:riverpod_standard/core/errors/exceptions.dart';
+import 'package:riverpod_standard/core/storage/secure_storage_service.dart';
+import 'package:riverpod_standard/features/session/data/models/user_model.dart';
 
 abstract class SessionLocalDataSource {
   String get storageKey;
 
-  Future<Either<AppException, User>> fetchUser();
-  Future<bool> saveUser({required User user});
+  /// Throws [AppException] when no user is stored.
+  Future<UserModel> fetchUser();
+  Future<bool> saveUser(UserModel user);
   Future<bool> deleteUser();
   Future<bool> hasUser();
 }
 
 class SessionLocalDataSourceImpl extends SessionLocalDataSource {
   SessionLocalDataSourceImpl(this.storageService);
-  final LocalStorageService storageService;
+  final SecureStorageService storageService;
 
   @override
   String get storageKey => StorageKeys.user;
 
   @override
-  Future<Either<AppException, User>> fetchUser() async {
-    final data = await storageService.get(storageKey);
+  Future<UserModel> fetchUser() async {
+    final data = await storageService.read(storageKey);
     if (data == null) {
-      return Left(
-        AppException(
-          identifier: 'SessionLocalDataSourceImpl',
-          statusCode: 404,
-          message: 'User not found',
-        ),
+      throw AppException(
+        identifier: 'SessionLocalDataSourceImpl',
+        statusCode: 404,
+        message: 'User not found',
       );
     }
-    final userJson = jsonDecode(data.toString());
-
-    return Right(User.fromJson(userJson));
+    return UserModel.fromJson(jsonDecode(data) as Map<String, dynamic>);
   }
 
   @override
   Future<bool> deleteUser() async {
-    return await storageService.remove(storageKey);
+    await storageService.delete(storageKey);
+    return true;
   }
 
   @override
-  Future<bool> hasUser() async {
-    return await storageService.has(storageKey);
-  }
+  Future<bool> hasUser() async => await storageService.read(storageKey) != null;
 
   @override
-  Future<bool> saveUser({required User user}) async {
-    return await storageService.set(storageKey, jsonEncode(user.toJson()));
+  Future<bool> saveUser(UserModel user) async {
+    await storageService.write(
+      key: storageKey,
+      value: jsonEncode(user.toJson()),
+    );
+    return true;
   }
 }

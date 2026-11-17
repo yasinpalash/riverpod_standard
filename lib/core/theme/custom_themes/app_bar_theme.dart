@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../core/constants/app_colors.dart';
-import '../../system/system_ui_config.dart';
-import 'app_text_styles.dart';
+import 'package:riverpod_standard/core/constants/app_colors.dart';
+import 'package:riverpod_standard/core/system/system_ui_config.dart';
+import 'package:riverpod_standard/core/theme/custom_themes/app_text_styles.dart';
 
 class AppBarForTheme {
   AppBarForTheme._();

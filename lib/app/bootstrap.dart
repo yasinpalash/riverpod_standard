@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/app/app.dart';
+import 'package:riverpod_standard/app/observers.dart';
 import 'package:riverpod_standard/config/app_config.dart';
+import 'package:riverpod_standard/config/app_config_provider.dart';
 import 'package:riverpod_standard/core/logging/logging.dart';
 import 'package:riverpod_standard/core/system/system_ui_config.dart';
-import '../config/app_config_provider.dart';
-import 'observers.dart';
 
 Future<void> bootstrap(AppConfig config) async {
   WidgetsFlutterBinding.ensureInitialized();

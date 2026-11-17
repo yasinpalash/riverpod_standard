@@ -16,6 +16,6 @@ class ConnectivityService {
     yield* _connectivity.onConnectivityChanged.map(_hasNetwork).distinct();
   }
 
-  bool _hasNetwork(ConnectivityResult result) =>
-      result != ConnectivityResult.none;
+  bool _hasNetwork(List<ConnectivityResult> results) =>
+      results.any((result) => result != ConnectivityResult.none);
 }
