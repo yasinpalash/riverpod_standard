@@ -1,47 +1,33 @@
-import 'package:equatable/equatable.dart';
-import 'package:riverpod_standard/core/constants/app_strings.dart';
+import 'package:riverpod_standard/core/errors/failure_code.dart';
 
+/// Data-layer exception. Thrown by datasources, mapped to a `Failure` by
+/// `ExceptionMapper`. [message] is the backend-provided text (may be empty);
+/// [identifier] is diagnostic only and is never shown to users.
 class AppException implements Exception {
+  AppException({
+    this.message = '',
+    this.statusCode = 0,
+    this.identifier = '',
+    FailureCode? code,
+  }) : code = code ?? FailureCode.fromStatusCode(statusCode);
+
   final String message;
   final int statusCode;
   final String identifier;
-
-  AppException({
-    required this.message,
-    required this.statusCode,
-    required this.identifier,
-  });
+  final FailureCode code;
 
   @override
-  String toString() {
-    return 'statusCode=$statusCode\nmessage=$message\nidentifier=$identifier';
-  }
+  String toString() =>
+      'AppException(code=$code, statusCode=$statusCode, message=$message, '
+      'identifier=$identifier)';
 }
 
-class CacheFailureException extends Equatable implements AppException {
-  @override
-  String get identifier => 'Cache failure exception';
-
-  @override
-  String get message => 'Unable to save user';
-
-  @override
-  int get statusCode => 100;
-
-  @override
-  List<Object?> get props => [message, statusCode, identifier];
+class CacheFailureException extends AppException {
+  CacheFailureException({super.identifier = 'Cache failure'})
+    : super(code: FailureCode.cache);
 }
 
-class NoInternetException extends Equatable implements AppException {
-  @override
-  String get identifier => 'No internet connection';
-
-  @override
-  String get message => AppStrings.noInternetConnection;
-
-  @override
-  int get statusCode => 0;
-
-  @override
-  List<Object?> get props => [message, statusCode, identifier];
+class NoInternetException extends AppException {
+  NoInternetException({super.identifier = 'No internet connection'})
+    : super(code: FailureCode.noConnection);
 }

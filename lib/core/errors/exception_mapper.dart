@@ -1,4 +1,5 @@
 import 'package:riverpod_standard/core/errors/exceptions.dart';
+import 'package:riverpod_standard/core/errors/failure_code.dart';
 import 'package:riverpod_standard/core/errors/failures.dart';
 import 'package:riverpod_standard/core/result/either.dart';
 import 'package:riverpod_standard/core/typedefs/typedefs.dart';
@@ -11,14 +12,14 @@ class ExceptionMapper {
     if (error is Failure) return error;
     if (error is AppException) {
       return Failure(
-        message: error.message,
+        code: error.code,
         statusCode: error.statusCode,
+        serverMessage: error.message.isEmpty ? null : error.message,
         identifier: error.identifier,
       );
     }
     return Failure(
-      message: 'Unknown error occurred',
-      statusCode: 2,
+      code: FailureCode.unknown,
       identifier: 'Unknown error $error',
     );
   }

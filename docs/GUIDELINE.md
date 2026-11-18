@@ -306,6 +306,9 @@ Never copy the token into state, logs or other storage.
 | Notifier calls a repository directly | Go through a use case |
 | Datasource returns `Either` | Throw; the repository maps to `Failure` |
 | Catching `DioException` in a notifier | Only handle `Failure` |
+| Showing `failure.serverMessage` / `identifier` directly | Use `failure.userMessage` |
+| Async notifier applies a late response after reset | Capture a generation counter and drop stale results |
+| Logging bodies/headers directly | Go through `LogRedactor` |
 | Pagination math in the notifier | Put it in a domain entity/use case |
 | Importing `features/x/data` from presentation | Use the domain or a public provider |
 | UI strings or `ApiConstants` in state | Keep state as enums/flags |

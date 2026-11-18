@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:riverpod_standard/core/errors/failures.dart';
 import 'package:riverpod_standard/features/home/domain/entities/product.dart';
 
 enum HomeConcreteState {
@@ -16,15 +17,15 @@ class HomeState extends Equatable {
   final int total;
   final bool hasData;
   final HomeConcreteState state;
-  /// Failure text from the domain/data layer; empty when there is no error.
-  final String errorMessage;
+  /// Last failure, or `null`. The widget maps it to text via `userMessage`.
+  final Failure? failure;
   final bool isLoading;
   const HomeState({
     this.productList = const [],
     this.isLoading = false,
     this.hasData = false,
     this.state = HomeConcreteState.initial,
-    this.errorMessage = '',
+    this.failure,
     this.total = 0,
   });
   const HomeState.initial({
@@ -33,7 +34,7 @@ class HomeState extends Equatable {
     this.isLoading = false,
     this.hasData = false,
     this.state = HomeConcreteState.initial,
-    this.errorMessage = '',
+    this.failure,
   });
 
   HomeState copyWith({
@@ -41,7 +42,8 @@ class HomeState extends Equatable {
     int? total,
     bool? hasData,
     HomeConcreteState? state,
-    String? errorMessage,
+    Failure? failure,
+    bool clearFailure = false,
     bool? isLoading,
   }) {
     return HomeState(
@@ -50,15 +52,15 @@ class HomeState extends Equatable {
       total: total ?? this.total,
       hasData: hasData ?? this.hasData,
       state: state ?? this.state,
-      errorMessage: errorMessage ?? this.errorMessage,
+      failure: clearFailure ? null : (failure ?? this.failure),
     );
   }
 
   @override
   String toString() {
-    return 'HomeState(isLoading:$isLoading, productLength: ${productList.length},total:$total, hasData: $hasData, state: $state, errorMessage: $errorMessage)';
+    return 'HomeState(isLoading:$isLoading, productLength: ${productList.length},total:$total, hasData: $hasData, state: $state, failure: $failure)';
   }
 
   @override
-  List<Object?> get props => [productList, total, hasData, state, errorMessage];
+  List<Object?> get props => [productList, total, hasData, state, failure];
 }

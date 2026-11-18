@@ -10,6 +10,7 @@ import 'package:riverpod_standard/core/network/events/network_event_bus.dart';
 import 'package:riverpod_standard/core/network/interceptors/auth_interceptor.dart';
 import 'package:riverpod_standard/core/network/interceptors/connectivity_interceptor.dart';
 import 'package:riverpod_standard/core/network/interceptors/global_error_interceptor.dart';
+import 'package:riverpod_standard/core/network/interceptors/redacted_log_interceptor.dart';
 import 'package:riverpod_standard/core/result/either.dart';
 import 'package:riverpod_standard/core/services/connectivity_service.dart';
 import 'package:riverpod_standard/core/storage/secure_storage_service.dart';
@@ -50,9 +51,7 @@ class ApiClient with ErrorHandler implements ApiService {
       );
     }
     if (enableLogging) {
-      this.dio.interceptors.add(
-        LogInterceptor(requestBody: true, responseBody: true),
-      );
+      this.dio.interceptors.add(RedactedLogInterceptor());
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:riverpod_standard/core/errors/failure_code.dart';
 import 'package:riverpod_standard/core/errors/failures.dart';
 import 'package:riverpod_standard/core/result/either.dart';
 import 'package:riverpod_standard/features/authentication/di/auth_di.dart';
@@ -19,7 +20,11 @@ void main() {
   setUpAll(() => registerFallbackValue(const User()));
 
   const user = User(id: 1, username: 'emily', token: 'abc');
-  const failure = Failure(message: 'bad', statusCode: 401, identifier: 'auth');
+  const failure = Failure(
+    code: FailureCode.unauthorized,
+    statusCode: 401,
+    identifier: 'auth',
+  );
 
   late _MockAuthRepository auth;
   late _MockSessionRepository session;

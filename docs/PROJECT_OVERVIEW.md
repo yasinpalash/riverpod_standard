@@ -91,8 +91,10 @@ flowchart LR
   N -->|state| UI[Screen]
 ```
 
-- `AppException` (core/errors/exceptions.dart): data-layer, thrown.
-- `Failure` (core/errors/failures.dart): domain-layer value, returned in `Left`.
+- `AppException` (core/errors/exceptions.dart): data-layer, thrown; carries a `FailureCode`.
+- `Failure` (core/errors/failures.dart): domain-layer value, returned in `Left`;
+  typed `code` + optional `serverMessage`. UI text comes from
+  `failure.userMessage` (core/errors/failure_messages.dart).
 - `ExceptionMapper.guard(() async => ...)` is the only place exceptions become
   failures.
 

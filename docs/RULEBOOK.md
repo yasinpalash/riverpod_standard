@@ -111,7 +111,14 @@ navigation. A feature MUST NOT import another feature's `data/`.
   wrapping work in `ExceptionMapper.guard` and mapping DTO → entity.
 - Domain and presentation MUST NOT catch `AppException`, `DioException` or
   `SocketException`; they only see `Failure`.
-- `Failure` has no dependency on exceptions; mapping lives in `ExceptionMapper` only.
+- `Failure` carries a typed `FailureCode` (enum) plus optional `serverMessage`; it has
+  no dependency on exceptions. Mapping lives in `ExceptionMapper` (and Dio →
+  code mapping in `ErrorHandler`) only. Magic status numbers are prohibited.
+- State holds the `Failure` (not a message string). Widgets show
+  `failure.userMessage` (`core/errors/failure_messages.dart`), which prefers the
+  backend message for client/server errors and otherwise a code-based string.
+- Stale responses MUST be dropped: a Notifier that can be reset or re-queried
+  keeps a generation counter (see `HomeNotifier`).
 - 401 handling is global (`GlobalErrorInterceptor` → `NetworkEventBus` →
   logout + redirect in `app/app.dart`); features MUST NOT handle it themselves.
 - Timeouts and base URLs live in `AppConfig`.
@@ -167,6 +174,9 @@ Only the `session` feature reads/writes the stored user; other features use
 - Provide a real `ErrorReporter` by overriding `errorReporterProvider`
   (the default is a no-op).
 - Use `AppLogger`; MUST NOT use `print`.
+- Anything that may contain credentials is logged only through `LogRedactor`
+  (`RedactedLogInterceptor` for Dio, the provider `Observers`). MUST NOT use
+  Dio's `LogInterceptor`.
 
 ---
 
@@ -229,6 +239,8 @@ MUST NOT:
 - Return `Either` from a datasource, or throw from a repository
 - Catch `AppException` / `DioException` above the repository
 - Put UI strings, API constants or tokens in state
+- Branch on message text or magic status numbers (use `FailureCode`)
+- Log request/response bodies, headers or provider values without `LogRedactor`
 - Store tokens or user PII in SharedPreferences, logs or state
 - Use `StateNotifier`, GetIt or global mutable DI
 - Hand-edit generated files

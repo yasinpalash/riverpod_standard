@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/core/constants/app_strings.dart';
 import 'package:riverpod_standard/core/constants/route_constants.dart';
+import 'package:riverpod_standard/core/errors/failure_messages.dart';
 import 'package:riverpod_standard/core/theme/app_motion.dart';
 import 'package:riverpod_standard/core/utils/utils.dart';
 import 'package:riverpod_standard/core/widgets/app_error_view.dart';
@@ -180,8 +181,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ? AppStrings.somethingWentWrong
                         : AppStrings.noProductsFound,
                 message:
-                    state.errorMessage.isNotBlank
-                        ? state.errorMessage
+                    state.failure != null
+                        ? state.failure!.userMessage
                         : isSearchActive
                         ? AppStrings.tryDifferentSearchKeyword
                         : AppStrings.refreshListAndTryAgain,

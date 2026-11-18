@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:riverpod_standard/core/errors/exception_mapper.dart';
 import 'package:riverpod_standard/core/errors/exceptions.dart';
+import 'package:riverpod_standard/core/errors/failure_code.dart';
 import 'package:riverpod_standard/core/errors/failures.dart';
 
 void main() {
@@ -18,7 +19,12 @@ void main() {
       );
       expect(
         result.fold((f) => f, (_) => null),
-        const Failure(message: 'boom', statusCode: 500, identifier: 'x'),
+        const Failure(
+          code: FailureCode.server,
+          statusCode: 500,
+          serverMessage: 'boom',
+          identifier: 'x',
+        ),
       );
     });
 
@@ -27,7 +33,7 @@ void main() {
         () async => throw StateError('bad'),
       );
       final failure = result.fold((f) => f, (_) => null)!;
-      expect(failure.statusCode, 2);
+      expect(failure.code, FailureCode.unknown);
     });
   });
 }

@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:riverpod_standard/core/errors/exceptions.dart';
+import 'package:riverpod_standard/core/errors/failure_code.dart';
 import 'package:riverpod_standard/core/errors/failures.dart';
 import 'package:riverpod_standard/core/result/either.dart';
 import 'package:riverpod_standard/features/home/data/datasources/home_remote_data_source.dart';
@@ -67,7 +70,12 @@ void main() {
 
       expect(
         result.fold((f) => f, (_) => null),
-        const Failure(message: 'down', statusCode: 503, identifier: 'srv'),
+        const Failure(
+          code: FailureCode.server,
+          statusCode: 503,
+          serverMessage: 'down',
+          identifier: 'srv',
+        ),
       );
     });
   });
@@ -137,7 +145,11 @@ void main() {
       final repository = _MockRepository();
       when(() => repository.fetchProducts(skip: any(named: 'skip'), limit: any(named: 'limit'))).thenAnswer(
         (_) async => const Left(
-          Failure(message: 'nope', statusCode: 500, identifier: 'x'),
+          Failure(
+            code: FailureCode.server,
+            statusCode: 500,
+            serverMessage: 'nope',
+          ),
         ),
       );
       final container = ProviderContainer(
@@ -151,7 +163,38 @@ void main() {
 
       final state = container.read(homeNotifierProvider);
       expect(state.state, HomeConcreteState.failure);
-      expect(state.errorMessage, 'nope');
+      expect(state.failure?.serverMessage, 'nope');
+    });
+
+    test('drops a stale response after resetState', () async {
+      final repository = _MockRepository();
+      final slow = Completer<Either<Failure, ProductPage>>();
+      var calls = 0;
+      when(
+        () => repository.fetchProducts(
+          skip: any(named: 'skip'),
+          limit: any(named: 'limit'),
+        ),
+      ).thenAnswer((_) {
+        calls++;
+        return calls == 1
+            ? slow.future
+            : Future.value(const Right(ProductPage(products: [], total: 0, skip: 0)));
+      });
+      final container = ProviderContainer(
+        overrides: [homeRepositoryProvider.overrideWithValue(repository)],
+      );
+      addTearDown(container.dispose);
+      container.listen(homeNotifierProvider, (_, _) {});
+      await Future<void>.delayed(Duration.zero);
+
+      final notifier = container.read(homeNotifierProvider.notifier)
+        ..resetState();
+      await notifier.fetchProducts();
+      slow.complete(const Right(page));
+      await Future<void>.delayed(Duration.zero);
+
+      expect(container.read(homeNotifierProvider).productList, isEmpty);
     });
   });
 }

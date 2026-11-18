@@ -13,6 +13,15 @@ class AppStrings {
   static const String loginSubtitle = 'Login to continue your journey';
 
   static const String somethingWentWrong = 'Something went wrong';
+  static const String badRequestError = 'The request could not be processed';
+  static const String sessionExpired =
+      'Your session has expired. Please login again.';
+  static const String accessDenied = 'You do not have access to this resource';
+  static const String notFoundError = 'The requested item was not found';
+  static const String requestTimedOut = 'The request timed out. Try again.';
+  static const String serverError = 'Server error. Please try again later.';
+  static const String unableToSaveSession = 'Unable to save your session';
+  static const String requestCancelled = 'The request was cancelled';
   static const String unknownErrorOccurred = 'Unknown error occurred';
   static const String noInternetConnection =
       'Please check your internet connection and try again.';

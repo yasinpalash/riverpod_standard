@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_standard/core/logging/log_redactor.dart';
 import 'package:riverpod_standard/core/logging/logging.dart';
 
 final class Observers extends ProviderObserver {
@@ -12,7 +13,7 @@ final class Observers extends ProviderObserver {
     AppLogger.debug('''
 {
   "provider": "${provider.name ?? provider.runtimeType}",
-  "newValue": "$newValue"
+  "newValue": "${LogRedactor.redactAndTruncate(newValue, maxLength: 300)}"
 }''');
   }
 

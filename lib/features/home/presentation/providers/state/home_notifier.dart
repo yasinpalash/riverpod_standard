@@ -6,8 +6,15 @@ import 'package:riverpod_standard/features/home/domain/usecases/product_usecases
 import 'package:riverpod_standard/features/home/presentation/providers/state/home_state.dart';
 
 class HomeNotifier extends Notifier<HomeState> {
+  /// Bumped on every reset so a response from an older request is dropped
+  /// instead of overwriting newer state.
+  int _generation = 0;
+  String? _query;
+
   @override
   HomeState build() {
+    _generation = 0;
+    _query = null;
     Future.microtask(fetchProducts);
     return const HomeState.initial();
   }
@@ -21,15 +28,22 @@ class HomeNotifier extends Notifier<HomeState> {
       state.state == HomeConcreteState.loading ||
       state.state == HomeConcreteState.fetchingMore;
 
-  Future<void> fetchProducts() => _load(
-    (listing) => ref.read(fetchProductsProvider)(listing),
-  );
+  Future<void> fetchProducts() =>
+      _load((listing) => ref.read(fetchProductsProvider)(listing));
 
-  Future<void> searchProducts(String query) => _load(
-    (listing) => ref.read(searchProductsProvider)(
-      SearchProductsParams(current: listing, query: query),
-    ),
-  );
+  /// Searches for [query]. A different query than the previous one starts a
+  /// fresh result list; the same query loads the next page.
+  Future<void> searchProducts(String query) {
+    if (query != _query) {
+      resetState();
+      _query = query;
+    }
+    return _load(
+      (listing) => ref.read(searchProductsProvider)(
+        SearchProductsParams(current: listing, query: query),
+      ),
+    );
+  }
 
   Future<void> _load(
     ResultFuture<ProductListing> Function(ProductListing listing) load,
@@ -44,15 +58,18 @@ class HomeNotifier extends Notifier<HomeState> {
       return;
     }
 
+    final generation = _generation;
     state = state.copyWith(
-      errorMessage: '',
+      clearFailure: true,
       state:
           listing.isEmpty
               ? HomeConcreteState.loading
               : HomeConcreteState.fetchingMore,
       isLoading: true,
     );
-    _apply(await load(listing));
+    final result = await load(listing);
+    if (generation != _generation) return; // stale response
+    _apply(result);
   }
 
   void _apply(Result<ProductListing> result) {
@@ -60,7 +77,7 @@ class HomeNotifier extends Notifier<HomeState> {
       (failure) {
         state = state.copyWith(
           state: HomeConcreteState.failure,
-          errorMessage: failure.message,
+          failure: failure,
           isLoading: false,
         );
       },
@@ -80,6 +97,8 @@ class HomeNotifier extends Notifier<HomeState> {
   }
 
   void resetState() {
+    _generation++;
+    _query = null;
     state = const HomeState.initial();
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_standard/core/constants/app_strings.dart';
 import 'package:riverpod_standard/core/constants/route_constants.dart';
+import 'package:riverpod_standard/core/errors/failure_messages.dart';
 import 'package:riverpod_standard/core/routes/app_route.dart';
 import 'package:riverpod_standard/core/utils/utils.dart';
 import 'package:riverpod_standard/core/widgets/app_button.dart';
@@ -47,7 +48,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     ) {
       if (next is AuthFailure) {
         unawaited(ref.read(microInteractionServiceProvider).error());
-        context.showErrorSnackBar(next.failure.message.toString());
+        context.showErrorSnackBar(next.failure.userMessage);
       } else if (next is AuthSuccess) {
         unawaited(ref.read(microInteractionServiceProvider).success());
         AutoRouter.of(
